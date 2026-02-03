@@ -114,7 +114,7 @@ export default function IntegrationsPage() {
                 </button>
               </div>
               <p className="text-xs text-text/50 mt-1">
-                We'll send a POST request to this URL when you publish a post
+                We will send a POST request to this URL when you publish a post
               </p>
             </div>
 
@@ -277,7 +277,7 @@ export default function IntegrationsPage() {
             </div>
             <div>
               <h3 className="text-xl font-bold">More Integrations Coming Soon</h3>
-              <p className="text-sm text-text/60">We're working on direct integrations</p>
+              <p className="text-sm text-text/60">We are working on direct integrations</p>
             </div>
           </div>
 
