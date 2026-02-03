@@ -9,7 +9,9 @@ import {
   Clock,
   CheckCircle2,
   FileEdit,
-  Loader2
+  Loader2,
+  Shield,
+  AlertTriangle
 } from 'lucide-react'
 
 const stats = [
@@ -35,11 +37,11 @@ const stats = [
     color: 'purple',
   },
   {
-    name: 'Avg SEO Score',
-    value: '92/100',
-    change: '+3 points',
-    icon: TrendingUp,
-    color: 'primary',
+    name: 'Lost Revenue',
+    value: '$2,000',
+    change: 'Without blog',
+    icon: AlertTriangle,
+    color: 'orange',
   },
 ]
 
@@ -126,6 +128,25 @@ export default function DashboardPage() {
           </p>
         </div>
 
+        {/* Safety Status Indicator - V2 Feature */}
+        <div className="glass-strong rounded-xl p-4 border border-green-500/30 bg-green-500/5 animate-fade-in">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+                <Shield className="w-5 h-5 text-green-400" />
+              </div>
+              <div>
+                <h3 className="font-bold text-green-400">Safety Status: Protected</h3>
+                <p className="text-sm text-text/70">All content is backed up & copyright-safe</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+              <span className="text-sm text-green-400 font-medium">Active</span>
+            </div>
+          </div>
+        </div>
+
         {/* Stats Grid - Bento Style */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {stats.map((stat, index) => {
@@ -135,6 +156,7 @@ export default function DashboardPage() {
               green: 'bg-green-500/10 text-green-400',
               purple: 'bg-purple-500/10 text-purple-400',
               primary: 'bg-primary/10 text-primary',
+              orange: 'bg-orange-500/10 text-orange-400',
             }
 
             return (
