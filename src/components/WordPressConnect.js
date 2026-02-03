@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { 
-  Wordpress, 
+  Globe, 
   CheckCircle2, 
   AlertCircle, 
   ExternalLink, 
@@ -51,7 +51,7 @@ export default function WordPressConnect() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-            <Wordpress className="w-6 h-6 text-blue-400" />
+            <Globe className="w-6 h-6 text-blue-400" />
           </div>
           <div>
             <h3 className="text-xl font-bold">WordPress Integration</h3>
