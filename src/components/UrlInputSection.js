@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { Link2, Sparkles, Loader2 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
+
+// Dynamically import motion with no SSR
+const motion = {
+  div: dynamic(() => import('framer-motion').then(mod => mod.motion.div), { ssr: false }),
+}
 
 export default function UrlInputSection({ onUrlDetected, onGenerate }) {
   const [url, setUrl] = useState('')

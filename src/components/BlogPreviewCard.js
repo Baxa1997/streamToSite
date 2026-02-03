@@ -2,7 +2,12 @@
 
 import { useState } from 'react'
 import { Edit3, Send, Eye, DollarSign, Sparkles } from 'lucide-react'
-import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
+
+// Dynamically import motion with no SSR
+const motion = {
+  div: dynamic(() => import('framer-motion').then(mod => mod.motion.div), { ssr: false }),
+}
 
 export default function BlogPreviewCard({ data, onEdit, onPublish }) {
   const [title, setTitle] = useState(data?.title || 'Analysis: The Hidden Meaning of Inception')
