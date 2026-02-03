@@ -26,11 +26,9 @@ export default function WordPressConnect() {
     setIsConnecting(true)
     setConnectionError('')
     
-    // Simulate connection test
     setTimeout(() => {
       setIsConnecting(false)
       
-      // Simulate success (90% of the time)
       if (Math.random() > 0.1) {
         setIsConnected(true)
       } else {
