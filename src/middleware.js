@@ -73,6 +73,8 @@ export default async function middleware(req) {
     hostname === mainDomainWithoutPort ||
     hostname === `www.${mainDomain}` ||
     hostname === `www.${mainDomainWithoutPort}` ||
+    hostname.endsWith('.vercel.app') || // Allow Vercel deployments
+    hostname.endsWith('.vercel.com') || // Allow Vercel preview deployments
     (hostname.includes('localhost') && !url.searchParams.get('subdomain') && !url.searchParams.get('app'))
   ) {
     console.log('[Middleware] → Main marketing site')

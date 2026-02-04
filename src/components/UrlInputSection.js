@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Link2, Sparkles, Loader2 } from 'lucide-react'
 import dynamic from 'next/dynamic'
 
-// Dynamically import motion with no SSR
+
 const motion = {
   div: dynamic(() => import('framer-motion').then(mod => mod.motion.div), { ssr: false }),
 }
@@ -14,24 +14,19 @@ export default function UrlInputSection({ onUrlDetected, onGenerate }) {
   const [isValidUrl, setIsValidUrl] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  // YouTube URL regex
   const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/
 
   useEffect(() => {
-    // Check if URL is valid YouTube URL
     if (url && youtubeRegex.test(url)) {
       setIsValidUrl(true)
       
-      // Trigger instant preview after 1.5 seconds
       setIsLoading(true)
       
       const timer = setTimeout(() => {
         setIsLoading(false)
         
-        // Extract video ID for thumbnail
         const videoId = extractVideoId(url)
         
-        // Call parent callback with mock data
         if (onUrlDetected) {
           onUrlDetected({
             url,
@@ -49,14 +44,12 @@ export default function UrlInputSection({ onUrlDetected, onGenerate }) {
   }, [url])
 
   const extractVideoId = (url) => {
-    // Extract video ID from YouTube URL
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
     const match = url.match(regExp)
-    return (match && match[2].length === 11) ? match[2] : 'dQw4w9WgXcQ' // Fallback ID
+    return (match && match[2].length === 11) ? match[2] : 'dQw4w9WgXcQ' 
   }
 
   const generateMockTitle = (url) => {
-    // Generate mock title based on URL
     const titles = [
       'Analysis: The Hidden Meaning of Inception',
       'Breaking Down: The Dark Knight\'s Best Scenes',
@@ -75,7 +68,6 @@ export default function UrlInputSection({ onUrlDetected, onGenerate }) {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -94,7 +86,6 @@ export default function UrlInputSection({ onUrlDetected, onGenerate }) {
         </p>
       </motion.div>
 
-      {/* Input Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -102,7 +93,6 @@ export default function UrlInputSection({ onUrlDetected, onGenerate }) {
         className="bento-card"
       >
         <div className="space-y-6">
-          {/* URL Input */}
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
               <Link2 className={`w-6 h-6 transition-colors ${isValidUrl ? 'text-green-400' : 'text-text/50'}`} />
@@ -120,7 +110,6 @@ export default function UrlInputSection({ onUrlDetected, onGenerate }) {
               disabled={isLoading}
             />
             
-            {/* Valid URL Indicator */}
             {isValidUrl && !isLoading && (
               <motion.div
                 initial={{ scale: 0 }}
@@ -136,7 +125,6 @@ export default function UrlInputSection({ onUrlDetected, onGenerate }) {
             )}
           </div>
 
-          {/* Loading State */}
           {isLoading && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
@@ -160,7 +148,6 @@ export default function UrlInputSection({ onUrlDetected, onGenerate }) {
             </motion.div>
           )}
 
-          {/* Generate Button */}
           <button
             onClick={handleGenerate}
             disabled={!isValidUrl || isLoading}
@@ -179,7 +166,6 @@ export default function UrlInputSection({ onUrlDetected, onGenerate }) {
             )}
           </button>
 
-          {/* Help Text */}
           <div className="text-center">
             <p className="text-sm text-text/50">
               Supports YouTube, TikTok, and most video platforms
@@ -188,7 +174,6 @@ export default function UrlInputSection({ onUrlDetected, onGenerate }) {
         </div>
       </motion.div>
 
-      {/* Example URLs */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
