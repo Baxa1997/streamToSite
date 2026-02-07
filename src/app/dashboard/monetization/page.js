@@ -67,14 +67,33 @@ export default function MonetizationPage() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        {/* Page Header */}
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">
-            Monetization
-          </h1>
-          <p className="text-neutral-500 mt-1">
-            Manage your revenue streams and maximize earnings
-          </p>
+        {/* Page Header with Save Button */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">
+              Monetization
+            </h1>
+            <p className="text-neutral-500 mt-1">
+              Manage your revenue streams and maximize earnings
+            </p>
+          </div>
+          <button
+            onClick={handleSave}
+            disabled={saved}
+            className="btn-primary px-6 disabled:opacity-50"
+          >
+            {saved ? (
+              <>
+                <CheckCircle2 className="w-4 h-4" />
+                Saved Successfully
+              </>
+            ) : (
+              <>
+                <DollarSign className="w-4 h-4" />
+                Save Configuration
+              </>
+            )}
+          </button>
         </div>
 
         {/* Revenue Overview */}
@@ -312,29 +331,10 @@ export default function MonetizationPage() {
           </div>
         </div>
 
-        {/* Save Action */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
-          <div className="flex items-center gap-2 text-xs text-neutral-500">
-            <Shield className="w-4 h-4" />
-            <span>All API keys are encrypted and stored securely</span>
-          </div>
-          <button
-            onClick={handleSave}
-            disabled={saved}
-            className="btn-primary px-6 disabled:opacity-50"
-          >
-            {saved ? (
-              <>
-                <CheckCircle2 className="w-4 h-4" />
-                Saved Successfully
-              </>
-            ) : (
-              <>
-                <DollarSign className="w-4 h-4" />
-                Save Configuration
-              </>
-            )}
-          </button>
+        {/* Security Note */}
+        <div className="flex items-center gap-2 text-xs text-neutral-500 pt-2">
+          <Shield className="w-4 h-4" />
+          <span>All API keys are encrypted and stored securely</span>
         </div>
 
         {/* Active Status */}

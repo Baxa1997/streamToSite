@@ -7,13 +7,17 @@ import {
   Globe, 
   FileText,
   TrendingUp,
-  MoreHorizontal,
-  ExternalLink,
-  Edit3,
-  Clock,
   ArrowUpRight,
   ArrowDownRight,
-  Sparkles
+  Sparkles,
+  Link2,
+  MousePointer,
+  BarChart3,
+  Clock,
+  User,
+  ExternalLink,
+  Edit3,
+  CheckCircle2
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -58,71 +62,78 @@ const stats = [
   },
 ]
 
-// Recent Activity Data
+// Recent Activity Data with expanded fields to match reference image
 const recentActivity = [
   {
     id: 1,
-    title: 'Inception Ending Explained - Mind-Bending Analysis',
-    thumbnail: '🎬',
+    title: 'Exploring the iPhone 16e: A Comprehensive Review of Features and Performance',
+    thumbnail: '/api/placeholder/160/100',
+    thumbnailEmoji: '📱',
     status: 'published',
-    date: '2 hours ago',
-    views: '12,453',
-    slug: 'inception-ending-explained',
+    author: 'Sm Onil',
+    date: '12 Mar 2025',
+    lastEdited: '1 hour ago',
+    excerpt: 'As I unwrapped my new iPhone 16e, I felt the thrill of anticipation. This phone promised a sleek design and robust features, but would it meet my expectations? After a week of testing, I\'ve compiled my thoughts to share what it\'s really like to use this device daily. Join me on this exploration as we delve into every nook and cranny of the iPhone 16e, from its minimalist design to its mysterious new...',
+    words: 1973,
+    links: 4,
+    clicks: 0,
+    earnings: 0,
+    cr: '0.00%',
+    slug: 'iphone-16e-review',
   },
   {
     id: 2,
-    title: 'Breaking: New AI Regulations Announced by EU',
-    thumbnail: '🤖',
+    title: 'Unleashing Creativity: The Best AI Writer Tools in 2023',
+    thumbnail: '/api/placeholder/160/100',
+    thumbnailEmoji: '🤖',
     status: 'published',
-    date: '5 hours ago',
-    views: '8,921',
-    slug: 'ai-regulations-eu',
+    author: 'Sm Onil',
+    date: '04 Mar 2025',
+    lastEdited: '12 minutes ago',
+    excerpt: 'As a writer, I\'ve often faced the daunting blank page, feeling paralyzed by the sheer volume of possibilities. It was during one of my creative slumps that I stumbled upon AI writing tools that promised not just to alleviate the pressure but also to aid my creativity. In this post, let\'s delve into how these tools can be game changers for writers in 2023 and beyond! The Transformative Power of AI Writing Too...',
+    words: 2084,
+    links: 6,
+    clicks: 0,
+    earnings: 0,
+    cr: '0.00%',
+    slug: 'ai-writer-tools-2023',
   },
   {
     id: 3,
-    title: 'The Dark Knight - Why It\'s Still Relevant in 2026',
-    thumbnail: '🦇',
-    status: 'draft',
-    date: '1 day ago',
-    views: '-',
-    slug: 'dark-knight-analysis',
-  },
-  {
-    id: 4,
-    title: 'Tech News Roundup - January 2026 Edition',
-    thumbnail: '📱',
+    title: '10 Must-Have Gadgets for Kids: Essential Tools for the Modern Parent',
+    thumbnail: '/api/placeholder/160/100',
+    thumbnailEmoji: '🧸',
     status: 'published',
-    date: '2 days ago',
-    views: '15,234',
-    slug: 'tech-news-january',
-  },
-  {
-    id: 5,
-    title: 'Interstellar Science Breakdown - Real Physics Explained',
-    thumbnail: '🌌',
-    status: 'published',
-    date: '3 days ago',
-    views: '22,891',
-    slug: 'interstellar-science',
+    author: 'Sm Onil',
+    date: '13 Feb 2025',
+    lastEdited: 'last month',
+    excerpt: 'As a parent, I often find myself amidst a whirlwind of tech promising to be the next big learning tool. I remember the day my child received a coding robot for their birthday; it not only entertained them for hours but also sparked a curiosity that I\'d never anticipated. If you\'re like me, standing at the crossroads of overwhelming options, then this guide to the...',
+    words: 2017,
+    links: 0,
+    clicks: 0,
+    earnings: 0,
+    cr: '0.00%',
+    slug: 'gadgets-for-kids',
   },
 ]
 
-// Status Badge Component
+// Status Badge Component (matching reference image style)
 const StatusBadge = ({ status }) => {
   const styles = {
-    published: 'badge-success',
-    draft: 'badge-neutral',
-    processing: 'badge-warning',
+    published: 'bg-orange-500 text-white',
+    draft: 'bg-neutral-400 text-white',
+    processing: 'bg-amber-500 text-white',
   }
   
   const labels = {
-    published: 'Published',
-    draft: 'Draft',
-    processing: 'Processing',
+    published: 'PUBLISHED',
+    draft: 'DRAFT',
+    processing: 'PROCESSING',
   }
   
   return (
-    <span className={styles[status] || 'badge-neutral'}>
+    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wide ${styles[status] || 'bg-neutral-400 text-white'}`}>
+      <CheckCircle2 className="w-3 h-3" />
       {labels[status] || status}
     </span>
   )
@@ -141,6 +152,96 @@ const Sparkline = ({ data }) => {
           style={{ height: `${(value / max) * 100}%` }}
         />
       ))}
+    </div>
+  )
+}
+
+// Post Card Component (matching reference image)
+const PostCard = ({ post }) => {
+  return (
+    <div className="bg-white rounded-xl border border-neutral-200 p-4 hover:shadow-lg transition-all duration-200">
+      <div className="flex gap-4">
+        {/* Thumbnail */}
+        <div className="w-40 h-24 rounded-lg bg-neutral-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
+          <span className="text-4xl">{post.thumbnailEmoji}</span>
+        </div>
+        
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          {/* Title */}
+          <h3 className="font-semibold text-neutral-900 text-base mb-2 line-clamp-1">
+            {post.title}
+          </h3>
+          
+          {/* Author & Date Row */}
+          <div className="flex items-center gap-4 text-xs text-neutral-500 mb-2">
+            <span className="flex items-center gap-1">
+              <User className="w-3 h-3" />
+              {post.author}
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              {post.date}
+            </span>
+            <span className="text-neutral-400">
+              · Last edited {post.lastEdited}
+            </span>
+          </div>
+          
+          {/* Excerpt */}
+          <p className="text-xs text-neutral-600 line-clamp-2 mb-3">
+            {post.excerpt}
+          </p>
+          
+          {/* Stats Row */}
+          <div className="flex items-center gap-4 text-xs mb-3">
+            <span className="flex items-center gap-1 text-neutral-600">
+              <FileText className="w-3 h-3 text-blue-500" />
+              <span className="text-blue-500 font-medium">WORDS:</span>
+              <span className="text-neutral-800 font-medium">{post.words.toLocaleString()}</span>
+            </span>
+            <span className="flex items-center gap-1 text-neutral-600">
+              <Link2 className="w-3 h-3 text-purple-500" />
+              <span className="text-purple-500 font-medium">LINKS:</span>
+              <span className="text-neutral-800 font-medium">{post.links}</span>
+            </span>
+            <span className="flex items-center gap-1 text-neutral-600">
+              <MousePointer className="w-3 h-3 text-emerald-500" />
+              <span className="text-emerald-500 font-medium">CLICKS:</span>
+              <span className="text-neutral-800 font-medium">{post.clicks}</span>
+            </span>
+            <span className="flex items-center gap-1 text-neutral-600">
+              <DollarSign className="w-3 h-3 text-green-500" />
+              <span className="text-green-500 font-medium">EARNINGS:</span>
+              <span className="text-neutral-800 font-medium">${post.earnings}</span>
+            </span>
+            <span className="flex items-center gap-1 text-neutral-600">
+              <BarChart3 className="w-3 h-3 text-orange-500" />
+              <span className="text-orange-500 font-medium">CR:</span>
+              <span className="text-neutral-800 font-medium">{post.cr}</span>
+            </span>
+          </div>
+          
+          {/* Status Badge */}
+          <StatusBadge status={post.status} />
+        </div>
+        
+        {/* Actions */}
+        <div className="flex flex-col gap-2 flex-shrink-0">
+          <Link 
+            href={`/dashboard/editor/${post.id}`}
+            className="px-4 py-2 text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors border border-neutral-200"
+          >
+            View Details
+          </Link>
+          <Link 
+            href={`/dashboard/editor/${post.id}`}
+            className="px-4 py-2 text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors border border-neutral-200"
+          >
+            Edit Blog
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }
@@ -243,85 +344,19 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        {/* Recent Activity Table */}
-        <div className="card">
-          <div className="card-header flex items-center justify-between">
+        {/* Recent Activity - New Card Layout */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-neutral-900">Recent Activity</h2>
             <Link href="/dashboard/studio" className="btn-ghost text-sm">
               View All
             </Link>
           </div>
           
-          <div className="table-wrapper">
-            <table className="table">
-              <thead className="table-header">
-                <tr>
-                  <th className="table-header-cell">Content</th>
-                  <th className="table-header-cell">Status</th>
-                  <th className="table-header-cell hidden sm:table-cell">Date</th>
-                  <th className="table-header-cell hidden md:table-cell">Views</th>
-                  <th className="table-header-cell text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentActivity.map((item) => (
-                  <tr key={item.id} className="table-row">
-                    <td className="table-cell">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center text-xl">
-                          {item.thumbnail}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="font-medium text-neutral-900 truncate max-w-[200px] sm:max-w-[300px]">
-                            {item.title}
-                          </p>
-                          <p className="text-xs text-neutral-500 sm:hidden">
-                            {item.date}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="table-cell">
-                      <StatusBadge status={item.status} />
-                    </td>
-                    <td className="table-cell hidden sm:table-cell">
-                      <div className="flex items-center gap-1.5 text-neutral-500">
-                        <Clock className="w-3.5 h-3.5" />
-                        <span>{item.date}</span>
-                      </div>
-                    </td>
-                    <td className="table-cell hidden md:table-cell">
-                      <span className="font-medium text-neutral-900">{item.views}</span>
-                    </td>
-                    <td className="table-cell text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <Link 
-                          href={`/dashboard/editor/${item.id}`}
-                          className="btn-icon"
-                          title="Edit"
-                        >
-                          <Edit3 className="w-4 h-4" />
-                        </Link>
-                        {item.status === 'published' && (
-                          <a 
-                            href={`#`}
-                            className="btn-icon"
-                            title="View Live"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                        )}
-                        <button className="btn-icon" title="More options">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-4">
+            {recentActivity.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
           </div>
         </div>
 

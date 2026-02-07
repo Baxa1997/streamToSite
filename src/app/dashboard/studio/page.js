@@ -17,172 +17,219 @@ import {
   CheckCircle2,
   FileEdit,
   Loader2,
-  ExternalLink
+  ExternalLink,
+  FileText,
+  Link2,
+  MousePointer,
+  DollarSign,
+  BarChart3,
+  User,
+  ChevronDown
 } from 'lucide-react'
 import Link from 'next/link'
 
-// Mock content data
+// Mock content data with expanded fields
 const contentData = [
   {
     id: 1,
-    title: 'Inception Ending Explained - Mind-Bending Analysis',
-    thumbnail: '🎬',
+    title: 'Exploring the iPhone 16e: A Comprehensive Review of Features and Performance',
+    thumbnailEmoji: '📱',
     status: 'published',
-    site: 'Movie King',
-    views: '12,453',
-    date: '2024-02-05',
-    excerpt: 'A deep dive into Christopher Nolan\'s masterpiece and what the spinning top really means...'
+    site: 'Tech Pulse',
+    author: 'Sm Onil',
+    date: '12 Mar 2025',
+    lastEdited: '1 hour ago',
+    excerpt: 'As I unwrapped my new iPhone 16e, I felt the thrill of anticipation. This phone promised a sleek design and robust features, but would it meet my expectations? After a week of testing, I\'ve compiled my thoughts to share what it\'s really like to use this device daily. Join me on this exploration as we delve into every nook and cranny of the iPhone 16e, from its minimalist design to its mysterious new...',
+    words: 1973,
+    links: 4,
+    clicks: 0,
+    earnings: 0,
+    cr: '0.00%',
   },
   {
     id: 2,
-    title: 'Breaking: New AI Regulations Announced by EU',
-    thumbnail: '🤖',
+    title: 'Unleashing Creativity: The Best AI Writer Tools in 2023',
+    thumbnailEmoji: '🤖',
     status: 'published',
     site: 'Tech Pulse',
-    views: '8,921',
-    date: '2024-02-04',
-    excerpt: 'The European Union has announced sweeping new regulations for artificial intelligence...'
+    author: 'Sm Onil',
+    date: '04 Mar 2025',
+    lastEdited: '12 minutes ago',
+    excerpt: 'As a writer, I\'ve often faced the daunting blank page, feeling paralyzed by the sheer volume of possibilities. It was during one of my creative slumps that I stumbled upon AI writing tools that promised not just to alleviate the pressure but also to aid my creativity. In this post, let\'s delve into how these tools can be game changers for writers in 2023 and beyond! The Transformative Power of AI Writing Too...',
+    words: 2084,
+    links: 6,
+    clicks: 0,
+    earnings: 0,
+    cr: '0.00%',
   },
   {
     id: 3,
     title: 'The Dark Knight - Why It\'s Still Relevant in 2026',
-    thumbnail: '🦇',
+    thumbnailEmoji: '🦇',
     status: 'draft',
     site: 'Movie King',
-    views: '-',
-    date: '2024-02-03',
-    excerpt: 'Examining the cultural impact of Heath Ledger\'s Joker and its relevance today...'
+    author: 'Sm Onil',
+    date: '03 Feb 2025',
+    lastEdited: '2 days ago',
+    excerpt: 'Examining the cultural impact of Heath Ledger\'s Joker and its relevance today. The Dark Knight continues to resonate with audiences nearly two decades after its release, and in this exploration, we uncover why...',
+    words: 1856,
+    links: 3,
+    clicks: 0,
+    earnings: 0,
+    cr: '0.00%',
   },
   {
     id: 4,
-    title: 'Tech News Roundup - January 2026 Edition',
-    thumbnail: '📱',
-    status: 'processing',
+    title: '10 Must-Have Gadgets for Kids: Essential Tools for the Modern Parent',
+    thumbnailEmoji: '🧸',
+    status: 'published',
     site: 'Tech Pulse',
-    views: '-',
-    date: '2024-02-02',
-    excerpt: 'All the biggest tech announcements from January 2026 in one comprehensive roundup...'
+    author: 'Sm Onil',
+    date: '13 Feb 2025',
+    lastEdited: 'last month',
+    excerpt: 'As a parent, I often find myself amidst a whirlwind of tech promising to be the next big learning tool. I remember the day my child received a coding robot for their birthday; it not only entertained them for hours but also sparked a curiosity that I\'d never anticipated. If you\'re like me, standing at the crossroads of overwhelming options, then this guide to the...',
+    words: 2017,
+    links: 0,
+    clicks: 0,
+    earnings: 0,
+    cr: '0.00%',
   },
   {
     id: 5,
-    title: 'Interstellar Science Breakdown',
-    thumbnail: '🌌',
-    status: 'published',
+    title: 'Interstellar Science Breakdown - Real Physics Explained',
+    thumbnailEmoji: '🌌',
+    status: 'processing',
     site: 'Movie King',
-    views: '22,891',
-    date: '2024-02-01',
-    excerpt: 'The real physics behind the black hole, time dilation, and the tesseract...'
+    author: 'Sm Onil',
+    date: '01 Feb 2025',
+    lastEdited: '3 days ago',
+    excerpt: 'The real physics behind the black hole, time dilation, and the tesseract. Christopher Nolan consulted with Nobel Prize-winning physicist Kip Thorne to ensure the science in Interstellar was as accurate as possible...',
+    words: 2891,
+    links: 8,
+    clicks: 0,
+    earnings: 0,
+    cr: '0.00%',
   },
 ]
 
-// Status Badge Component
+// Status Badge Component (matching reference image style)
 const StatusBadge = ({ status }) => {
   const configs = {
-    published: { class: 'badge-success', label: 'Published', icon: CheckCircle2 },
-    draft: { class: 'badge-neutral', label: 'Draft', icon: FileEdit },
-    processing: { class: 'badge-warning', label: 'Processing', icon: Loader2 },
+    published: { 
+      bg: 'bg-orange-500', 
+      text: 'text-white', 
+      label: 'PUBLISHED', 
+      icon: CheckCircle2 
+    },
+    draft: { 
+      bg: 'bg-neutral-400', 
+      text: 'text-white', 
+      label: 'DRAFT', 
+      icon: FileEdit 
+    },
+    processing: { 
+      bg: 'bg-amber-500', 
+      text: 'text-white', 
+      label: 'PROCESSING', 
+      icon: Loader2 
+    },
   }
   
   const config = configs[status] || configs.draft
   const Icon = config.icon
   
   return (
-    <span className={config.class}>
+    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wide ${config.bg} ${config.text}`}>
       <Icon className={`w-3 h-3 ${status === 'processing' ? 'animate-spin' : ''}`} />
       {config.label}
     </span>
   )
 }
 
-// Content Card Component
-const ContentCard = ({ content }) => {
-  const [menuOpen, setMenuOpen] = useState(false)
-  
+// Post Card Component (matching reference image)
+const PostCard = ({ content }) => {
   return (
-    <div className="card hover:shadow-md transition-all duration-200 group">
-      <div className="p-4">
-        <div className="flex items-start gap-4">
-          {/* Thumbnail */}
-          <div className="w-16 h-16 rounded-lg bg-neutral-100 flex items-center justify-center text-3xl flex-shrink-0">
-            {content.thumbnail}
-          </div>
-          
-          {/* Content Info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="font-semibold text-neutral-900 text-sm line-clamp-2">
-                {content.title}
-              </h3>
-              <div className="relative">
-                <button 
-                  onClick={() => setMenuOpen(!menuOpen)}
-                  className="btn-icon w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                >
-                  <MoreHorizontal className="w-4 h-4" />
-                </button>
-                
-                {menuOpen && (
-                  <>
-                    <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                    <div className="absolute right-0 top-full mt-1 w-36 bg-white rounded-lg shadow-lg border border-neutral-200 py-1 z-20">
-                      <Link href={`/dashboard/editor/${content.id}`} className="w-full px-3 py-2 text-left text-xs text-neutral-700 hover:bg-neutral-50 flex items-center gap-2">
-                        <Edit3 className="w-3.5 h-3.5" />
-                        Edit
-                      </Link>
-                      <button className="w-full px-3 py-2 text-left text-xs text-red-600 hover:bg-red-50 flex items-center gap-2">
-                        <Trash2 className="w-3.5 h-3.5" />
-                        Delete
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-            
-            <p className="text-xs text-neutral-500 mt-1 line-clamp-2">
-              {content.excerpt}
-            </p>
-            
-            <div className="flex items-center gap-3 mt-3">
-              <StatusBadge status={content.status} />
-              <span className="text-xs text-neutral-400">{content.site}</span>
-            </div>
-          </div>
+    <div className="bg-white rounded-xl border border-neutral-200 p-4 hover:shadow-lg transition-all duration-200">
+      <div className="flex gap-4">
+        {/* Thumbnail */}
+        <div className="w-40 h-24 rounded-lg bg-neutral-100 flex-shrink-0 overflow-hidden flex items-center justify-center">
+          <span className="text-4xl">{content.thumbnailEmoji}</span>
         </div>
         
-        {/* Footer Stats */}
-        <div className="flex items-center justify-between mt-4 pt-3 border-t border-neutral-100">
-          <div className="flex items-center gap-4 text-xs text-neutral-500">
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          {/* Title */}
+          <h3 className="font-semibold text-neutral-900 text-base mb-2 line-clamp-1">
+            {content.title}
+          </h3>
+          
+          {/* Author & Date Row */}
+          <div className="flex items-center gap-4 text-xs text-neutral-500 mb-2">
             <span className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5" />
+              <User className="w-3 h-3" />
+              {content.author}
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="w-3 h-3" />
               {content.date}
             </span>
-            {content.views !== '-' && (
-              <span className="flex items-center gap-1">
-                <Eye className="w-3.5 h-3.5" />
-                {content.views}
-              </span>
-            )}
+            <span className="text-neutral-400">
+              · Last edited {content.lastEdited}
+            </span>
           </div>
           
-          <div className="flex items-center gap-1">
-            <Link 
-              href={`/dashboard/editor/${content.id}`}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-neutral-100 text-neutral-700 hover:bg-neutral-200 transition-colors"
-            >
-              <Edit3 className="w-3 h-3" />
-              Edit
-            </Link>
-            {content.status === 'published' && (
-              <a 
-                href="#"
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-neutral-900 text-white hover:bg-neutral-800 transition-colors"
-              >
-                <ExternalLink className="w-3 h-3" />
-                View
-              </a>
-            )}
+          {/* Excerpt */}
+          <p className="text-xs text-neutral-600 line-clamp-2 mb-3">
+            {content.excerpt}
+          </p>
+          
+          {/* Stats Row */}
+          <div className="flex items-center gap-4 text-xs mb-3">
+            <span className="flex items-center gap-1 text-neutral-600">
+              <FileText className="w-3 h-3 text-blue-500" />
+              <span className="text-blue-500 font-medium">WORDS:</span>
+              <span className="text-neutral-800 font-medium">{content.words.toLocaleString()}</span>
+            </span>
+            <span className="flex items-center gap-1 text-neutral-600">
+              <Link2 className="w-3 h-3 text-purple-500" />
+              <span className="text-purple-500 font-medium">LINKS:</span>
+              <span className="text-neutral-800 font-medium">{content.links}</span>
+            </span>
+            <span className="flex items-center gap-1 text-neutral-600">
+              <MousePointer className="w-3 h-3 text-emerald-500" />
+              <span className="text-emerald-500 font-medium">CLICKS:</span>
+              <span className="text-neutral-800 font-medium">{content.clicks}</span>
+            </span>
+            <span className="flex items-center gap-1 text-neutral-600">
+              <DollarSign className="w-3 h-3 text-green-500" />
+              <span className="text-green-500 font-medium">EARNINGS:</span>
+              <span className="text-neutral-800 font-medium">${content.earnings}</span>
+            </span>
+            <span className="flex items-center gap-1 text-neutral-600">
+              <BarChart3 className="w-3 h-3 text-orange-500" />
+              <span className="text-orange-500 font-medium">CR:</span>
+              <span className="text-neutral-800 font-medium">{content.cr}</span>
+            </span>
           </div>
+          
+          {/* Status Badge */}
+          <StatusBadge status={content.status} />
+        </div>
+        
+        {/* Actions */}
+        <div className="flex flex-col gap-2 flex-shrink-0">
+          <Link 
+            href={`/dashboard/editor/${content.id}`}
+            className="px-4 py-2 text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors border border-neutral-200"
+          >
+            View Details
+          </Link>
+          <Link 
+            href={`/dashboard/editor/${content.id}`}
+            className="px-4 py-2 text-xs font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors border border-neutral-200"
+          >
+            Edit Blog
+          </Link>
         </div>
       </div>
     </div>
@@ -190,7 +237,7 @@ const ContentCard = ({ content }) => {
 }
 
 export default function StudioPage() {
-  const [viewMode, setViewMode] = useState('grid')
+  const [viewMode, setViewMode] = useState('list')
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   
@@ -218,6 +265,36 @@ export default function StudioPage() {
             <Plus className="w-4 h-4" />
             Create Content
           </Link>
+        </div>
+
+        {/* Tabs Navigation */}
+        <div className="flex items-center gap-6 border-b border-neutral-200 pb-1">
+          <button className="px-1 py-2 text-sm font-medium text-orange-600 border-b-2 border-orange-500">
+            All Blogs
+          </button>
+          <button className="px-1 py-2 text-sm font-medium text-neutral-500 hover:text-neutral-700">
+            Subscribers
+          </button>
+          <button className="px-1 py-2 text-sm font-medium text-neutral-500 hover:text-neutral-700">
+            Theme
+          </button>
+          <button className="px-1 py-2 text-sm font-medium text-neutral-500 hover:text-neutral-700">
+            Settings
+          </button>
+        </div>
+
+        {/* Filter Bar */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <button className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-lg hover:bg-orange-600 transition-colors">
+              All Blogs
+            </button>
+          </div>
+          
+          <button className="inline-flex items-center gap-2 px-4 py-2 bg-white text-neutral-700 text-sm border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors">
+            <Plus className="w-4 h-4" />
+            New Category
+          </button>
         </div>
 
         {/* Stats Bar */}
@@ -291,11 +368,11 @@ export default function StudioPage() {
           </div>
         </div>
 
-        {/* Content Grid */}
+        {/* Content List */}
         {filteredContent.length > 0 ? (
-          <div className={`grid gap-4 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
+          <div className="space-y-4">
             {filteredContent.map((content) => (
-              <ContentCard key={content.id} content={content} />
+              <PostCard key={content.id} content={content} />
             ))}
           </div>
         ) : (
