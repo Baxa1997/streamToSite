@@ -4,127 +4,454 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================
+   HYBRID THEME DESIGN SYSTEM
+   - Sidebar & Header: Dark Mode (bg-neutral-950)
+   - Main Content: Light/Soft Gray (bg-neutral-50)
+   - Cards & Panels: White with subtle shadows
+   - Accent: Cinema Red (#ef4444)
+   ============================================ */
+
+:root {
+  /* Core Colors */
+  --color-cinema-red: #ef4444;
+  --color-cinema-red-hover: #dc2626;
+  --color-cinema-red-light: rgba(239, 68, 68, 0.1);
+  
+  /* Dark Theme (Sidebar/Header) */
+  --color-dark-bg: #0a0a0a;
+  --color-dark-surface: #171717;
+  --color-dark-border: #262626;
+  --color-dark-text: #fafafa;
+  --color-dark-text-muted: #a3a3a3;
+  
+  /* Light Theme (Content Area) */
+  --color-light-bg: #fafafa;
+  --color-light-surface: #ffffff;
+  --color-light-border: #e5e5e5;
+  --color-light-text: #171717;
+  --color-light-text-muted: #737373;
+}
+
 @layer base {
   * {
-    @apply border-border-color;
+    @apply border-neutral-200;
   }
   
   body {
-    @apply bg-background text-text antialiased;
+    @apply bg-neutral-50 text-neutral-900 antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+    @apply font-semibold tracking-tight;
   }
 }
 
 @layer components {
-  /* Glass morphism effect */
-  .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  /* ============================================
+     SIDEBAR COMPONENTS (Dark Theme)
+     ============================================ */
+  
+  .sidebar {
+    @apply bg-neutral-950 text-neutral-400;
+  }
+  
+  .sidebar-nav-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200;
+    @apply text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800/50;
+  }
+  
+  .sidebar-nav-item-active {
+    @apply bg-red-500/10 text-red-400 hover:bg-red-500/15 hover:text-red-400;
+  }
+  
+  .sidebar-section-title {
+    @apply text-[11px] font-semibold uppercase tracking-wider text-neutral-500 px-3 mb-2;
   }
 
-  .glass-strong {
-    @apply bg-white/10 backdrop-blur-xl border border-white/20;
+  /* ============================================
+     TOP BAR COMPONENTS (Dark Theme)
+     ============================================ */
+  
+  .topbar {
+    @apply bg-neutral-950 border-b border-neutral-800;
+  }
+  
+  .breadcrumb {
+    @apply flex items-center gap-2 text-sm;
+  }
+  
+  .breadcrumb-item {
+    @apply text-neutral-400 hover:text-neutral-200 transition-colors;
+  }
+  
+  .breadcrumb-separator {
+    @apply text-neutral-600;
+  }
+  
+  .breadcrumb-current {
+    @apply text-neutral-200 font-medium;
   }
 
-  /* Button styles */
-  .btn-primary {
-    @apply bg-primary hover:bg-primary/90 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/50;
+  /* ============================================
+     CONTENT AREA COMPONENTS (Light Theme)
+     ============================================ */
+  
+  .content-area {
+    @apply bg-neutral-50 min-h-screen;
   }
 
-  .btn-secondary {
-    @apply glass hover:glass-strong text-text font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105;
-  }
-
-  .btn-ghost {
-    @apply text-text/80 hover:text-text hover:bg-white/5 font-medium px-4 py-2 rounded-lg transition-all duration-200;
-  }
-
-  /* Card styles */
+  /* ============================================
+     CARD COMPONENTS (Light Theme)
+     ============================================ */
+  
   .card {
-    @apply bg-surface border border-border-color rounded-xl p-6 transition-all duration-300;
+    @apply bg-white rounded-xl border border-neutral-200 shadow-sm;
   }
-
+  
   .card-hover {
-    @apply card hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1;
+    @apply card transition-all duration-300;
+    @apply hover:shadow-md hover:border-neutral-300 hover:-translate-y-0.5;
+  }
+  
+  .card-interactive {
+    @apply card-hover cursor-pointer;
+  }
+  
+  .card-header {
+    @apply px-6 py-4 border-b border-neutral-100;
+  }
+  
+  .card-body {
+    @apply p-6;
+  }
+  
+  .card-footer {
+    @apply px-6 py-4 border-t border-neutral-100 bg-neutral-50/50 rounded-b-xl;
   }
 
-  .card-glass {
-    @apply glass rounded-xl p-6 transition-all duration-300;
+  /* Stat Cards */
+  .stat-card {
+    @apply card p-5;
+  }
+  
+  .stat-card-icon {
+    @apply w-10 h-10 rounded-lg flex items-center justify-center;
+  }
+  
+  .stat-card-value {
+    @apply text-2xl font-bold text-neutral-900;
+  }
+  
+  .stat-card-label {
+    @apply text-sm text-neutral-500;
+  }
+  
+  .stat-card-change {
+    @apply text-xs font-medium;
+  }
+  
+  .stat-card-change-positive {
+    @apply stat-card-change text-emerald-600;
+  }
+  
+  .stat-card-change-negative {
+    @apply stat-card-change text-red-600;
   }
 
-  /* Bento grid cards */
-  .bento-card {
-    @apply bg-surface border border-border-color rounded-2xl p-6 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5;
+  /* Feature Cards (Site Cards) */
+  .feature-card {
+    @apply card overflow-hidden transition-all duration-300;
+    @apply hover:shadow-lg hover:border-neutral-300;
+  }
+  
+  .feature-card-header {
+    @apply p-4 border-b border-neutral-100 flex items-center gap-3;
+  }
+  
+  .feature-card-body {
+    @apply p-4;
+  }
+  
+  .feature-card-footer {
+    @apply p-4 border-t border-neutral-100 bg-neutral-50 flex items-center gap-2;
   }
 
-  /* Input styles */
+  /* ============================================
+     BUTTON COMPONENTS
+     ============================================ */
+  
+  /* Primary Button (Cinema Red) */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm;
+    @apply bg-red-500 text-white;
+    @apply hover:bg-red-600 active:bg-red-700;
+    @apply transition-all duration-200;
+    @apply shadow-sm hover:shadow-md;
+    @apply focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:ring-offset-2;
+  }
+  
+  .btn-primary-lg {
+    @apply btn-primary px-6 py-3 text-base;
+  }
+  
+  /* Secondary Button */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm;
+    @apply bg-white text-neutral-700 border border-neutral-300;
+    @apply hover:bg-neutral-50 hover:border-neutral-400;
+    @apply transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-neutral-500/20 focus:ring-offset-2;
+  }
+  
+  /* Ghost Button */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm;
+    @apply text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100;
+    @apply transition-all duration-200;
+  }
+  
+  /* Icon Button */
+  .btn-icon {
+    @apply inline-flex items-center justify-center w-9 h-9 rounded-lg;
+    @apply text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100;
+    @apply transition-all duration-200;
+  }
+  
+  /* Dark Theme Buttons (for sidebar) */
+  .btn-dark-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg font-medium text-sm;
+    @apply text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800;
+    @apply transition-all duration-200;
+  }
+
+  /* ============================================
+     INPUT COMPONENTS
+     ============================================ */
+  
   .input {
-    @apply bg-surface border border-border-color text-text rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200;
+    @apply w-full px-4 py-2.5 rounded-lg text-sm;
+    @apply bg-white border border-neutral-300 text-neutral-900 placeholder-neutral-400;
+    @apply focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500;
+    @apply transition-all duration-200;
+  }
+  
+  .input-lg {
+    @apply input px-5 py-4 text-base;
+  }
+  
+  .input-dark {
+    @apply w-full px-4 py-2.5 rounded-lg text-sm;
+    @apply bg-neutral-900 border border-neutral-700 text-neutral-100 placeholder-neutral-500;
+    @apply focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500;
+    @apply transition-all duration-200;
   }
 
-  /* Gradient backgrounds */
-  .gradient-bg {
-    background: linear-gradient(135deg, #0a0a0a 0%, #171717 50%, #0a0a0a 100%);
-  }
-
-  .gradient-primary {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  }
-
-  .gradient-mesh {
-    background: 
-      radial-gradient(at 0% 0%, rgba(239, 68, 68, 0.1) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(239, 68, 68, 0.05) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(239, 68, 68, 0.1) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, rgba(239, 68, 68, 0.05) 0px, transparent 50%),
-      #0a0a0a;
-  }
-
-  /* Status badges */
+  /* ============================================
+     BADGE COMPONENTS
+     ============================================ */
+  
   .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
   }
-
+  
   .badge-success {
-    @apply badge bg-green-500/10 text-green-400 border border-green-500/20;
+    @apply badge bg-emerald-50 text-emerald-700 border border-emerald-200;
   }
-
+  
   .badge-warning {
-    @apply badge bg-yellow-500/10 text-yellow-400 border border-yellow-500/20;
+    @apply badge bg-amber-50 text-amber-700 border border-amber-200;
   }
-
+  
   .badge-error {
-    @apply badge bg-red-500/10 text-red-400 border border-red-500/20;
+    @apply badge bg-red-50 text-red-700 border border-red-200;
   }
-
+  
   .badge-info {
-    @apply badge bg-blue-500/10 text-blue-400 border border-blue-500/20;
+    @apply badge bg-blue-50 text-blue-700 border border-blue-200;
+  }
+  
+  .badge-neutral {
+    @apply badge bg-neutral-100 text-neutral-600 border border-neutral-200;
   }
 
-  /* Scrollbar styling */
+  /* Status Indicators */
+  .status-dot {
+    @apply w-2 h-2 rounded-full;
+  }
+  
+  .status-dot-online {
+    @apply status-dot bg-emerald-500;
+  }
+  
+  .status-dot-offline {
+    @apply status-dot bg-neutral-400;
+  }
+  
+  .status-dot-warning {
+    @apply status-dot bg-amber-500;
+  }
+
+  /* ============================================
+     TABLE COMPONENTS
+     ============================================ */
+  
+  .table-wrapper {
+    @apply overflow-x-auto;
+  }
+  
+  .table {
+    @apply w-full;
+  }
+  
+  .table-header {
+    @apply border-b border-neutral-200;
+  }
+  
+  .table-header-cell {
+    @apply px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider;
+  }
+  
+  .table-row {
+    @apply border-b border-neutral-100 hover:bg-neutral-50 transition-colors;
+  }
+  
+  .table-cell {
+    @apply px-4 py-4 text-sm text-neutral-700;
+  }
+
+  /* ============================================
+     SEPARATOR COMPONENT
+     ============================================ */
+  
+  .separator {
+    @apply h-px bg-neutral-200;
+  }
+  
+  .separator-dark {
+    @apply h-px bg-neutral-800;
+  }
+
+  /* ============================================
+     AVATAR COMPONENTS
+     ============================================ */
+  
+  .avatar {
+    @apply relative inline-flex items-center justify-center rounded-full bg-neutral-200 text-neutral-600 font-medium;
+  }
+  
+  .avatar-sm {
+    @apply avatar w-8 h-8 text-xs;
+  }
+  
+  .avatar-md {
+    @apply avatar w-10 h-10 text-sm;
+  }
+  
+  .avatar-lg {
+    @apply avatar w-12 h-12 text-base;
+  }
+
+  /* ============================================
+     EMPTY STATE COMPONENT
+     ============================================ */
+  
+  .empty-state {
+    @apply border-2 border-dashed border-neutral-300 rounded-xl p-12;
+    @apply flex flex-col items-center justify-center text-center;
+    @apply bg-neutral-50/50 hover:bg-neutral-100/50 transition-colors cursor-pointer;
+  }
+  
+  .empty-state-icon {
+    @apply w-12 h-12 text-neutral-400 mb-4;
+  }
+  
+  .empty-state-title {
+    @apply text-lg font-semibold text-neutral-900 mb-2;
+  }
+  
+  .empty-state-description {
+    @apply text-sm text-neutral-500 max-w-sm;
+  }
+
+  /* ============================================
+     UPGRADE BANNER (Sidebar)
+     ============================================ */
+  
+  .upgrade-banner {
+    @apply bg-gradient-to-r from-red-600 to-red-500 rounded-lg p-4;
+    @apply text-white;
+  }
+  
+  .upgrade-banner-title {
+    @apply font-semibold text-sm mb-1;
+  }
+  
+  .upgrade-banner-text {
+    @apply text-xs text-red-100 mb-3;
+  }
+  
+  .upgrade-banner-button {
+    @apply w-full py-2 px-3 rounded-md text-sm font-medium;
+    @apply bg-white text-red-600 hover:bg-red-50;
+    @apply transition-colors duration-200;
+  }
+
+  /* ============================================
+     SPARKLINE CHART (Placeholder)
+     ============================================ */
+  
+  .sparkline {
+    @apply h-10 flex items-end gap-0.5;
+  }
+  
+  .sparkline-bar {
+    @apply w-1.5 bg-red-400 rounded-t transition-all duration-300;
+  }
+
+  /* ============================================
+     SCROLLBAR STYLING
+     ============================================ */
+  
   .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-surface;
+    @apply bg-transparent;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-border-color rounded-full hover:bg-primary/50;
+    @apply bg-neutral-300 rounded-full;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-400;
+  }
+  
+  .custom-scrollbar-dark::-webkit-scrollbar-thumb {
+    @apply bg-neutral-700 rounded-full;
+  }
+  
+  .custom-scrollbar-dark::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-600;
   }
 
-  /* Text gradients */
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-red-600;
+  /* ============================================
+     UTILITIES
+     ============================================ */
+  
+  .text-gradient-red {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-600;
   }
-
-  .text-gradient-white {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-text;
+  
+  .gradient-mesh-dark {
+    background: 
+      radial-gradient(at 0% 0%, rgba(239, 68, 68, 0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(239, 68, 68, 0.05) 0px, transparent 50%),
+      #0a0a0a;
   }
 }
 
@@ -144,4 +471,136 @@
   .animate-delay-300 {
     animation-delay: 300ms;
   }
+  
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+}
+
+/* ============================================
+   LANDING PAGE DARK THEME STYLES
+   These preserve the original dark landing page design
+   ============================================ */
+
+/* Dark page wrapper for landing */
+.landing-dark {
+  @apply bg-neutral-950 text-neutral-100;
+}
+
+/* Glass morphism for dark pages */
+.glass {
+  @apply bg-white/5 backdrop-blur-md border border-white/10;
+}
+
+.glass-strong {
+  @apply bg-white/10 backdrop-blur-xl border border-white/20;
+}
+
+/* Gradient mesh background for landing */
+.gradient-mesh {
+  background: 
+    radial-gradient(at 0% 0%, rgba(239, 68, 68, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(239, 68, 68, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(239, 68, 68, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(239, 68, 68, 0.05) 0px, transparent 50%),
+    #0a0a0a;
+  color: #ededed;
+}
+
+/* Dark theme text colors */
+.gradient-mesh h1,
+.gradient-mesh h2,
+.gradient-mesh h3,
+.gradient-mesh h4,
+.gradient-mesh h5,
+.gradient-mesh h6 {
+  @apply text-neutral-100;
+}
+
+.gradient-mesh p {
+  @apply text-neutral-300;
+}
+
+/* Text gradients for dark theme */
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-600;
+}
+
+.text-gradient-white {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-neutral-300;
+}
+
+/* Dark theme cards */
+.bento-card {
+  @apply bg-neutral-900 border border-neutral-800 rounded-2xl p-6;
+  @apply hover:border-red-500/30 transition-all duration-300;
+  @apply hover:shadow-lg hover:shadow-red-500/5;
+}
+
+.card-hover-dark {
+  @apply bg-neutral-900 border border-neutral-800 rounded-xl p-6;
+  @apply hover:border-red-500/50 hover:shadow-lg hover:shadow-red-500/10 hover:-translate-y-1;
+  @apply transition-all duration-300;
+}
+
+.card-glass {
+  @apply glass rounded-xl p-6 transition-all duration-300;
+}
+
+/* Dark theme buttons */
+.gradient-mesh .btn-primary {
+  @apply bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg;
+  @apply transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/50;
+}
+
+.gradient-mesh .btn-secondary {
+  @apply glass hover:bg-white/10 text-neutral-100 font-semibold px-6 py-3 rounded-lg;
+  @apply transition-all duration-300 hover:scale-105;
+}
+
+/* Dark theme input */
+.gradient-mesh .input {
+  @apply bg-neutral-900 border border-neutral-700 text-neutral-100 rounded-lg px-4 py-3;
+  @apply focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20;
+  @apply transition-all duration-200;
+}
+
+/* Gradient backgrounds */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+/* Dark surface colors */
+.bg-surface {
+  @apply bg-neutral-900;
+}
+
+.bg-background {
+  @apply bg-neutral-950;
+}
+
+/* Text utilities for dark theme */
+.text-text {
+  @apply text-neutral-100;
+}
+
+.text-text\/50 {
+  @apply text-neutral-100/50;
+}
+
+.text-text\/60 {
+  @apply text-neutral-100/60;
+}
+
+.text-text\/70 {
+  @apply text-neutral-100/70;
+}
+
+.text-text\/80 {
+  @apply text-neutral-100/80;
+}
+
+/* Border color for dark theme */
+.border-border-color {
+  @apply border-neutral-800;
 }

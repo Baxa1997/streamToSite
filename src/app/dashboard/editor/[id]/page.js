@@ -14,8 +14,16 @@ import {
   Monitor,
   X,
   CheckCircle2,
-  Loader2
+  Loader2,
+  ArrowLeft,
+  Clock,
+  ChevronDown,
+  BarChart3,
+  Target,
+  AlertCircle,
+  Check
 } from 'lucide-react'
+import Link from 'next/link'
 
 export default function EditorPage({ params }) {
   const { id } = params
@@ -60,6 +68,9 @@ This is transformative filmmaking—using visual language to tell a story that r
   const [aiResponse, setAiResponse] = useState('')
   const [isAiThinking, setIsAiThinking] = useState(false)
 
+  const seoScore = 94
+  const readabilityScore = 87
+
   const handleSave = () => {
     setIsSaving(true)
     setTimeout(() => {
@@ -90,7 +101,6 @@ This is transformative filmmaking—using visual language to tell a story that r
     
     setIsAiThinking(true)
     
-    // Simulate AI response
     setTimeout(() => {
       setAiResponse(`Here's a rewritten version with improved clarity:
 
@@ -109,39 +119,46 @@ Would you like me to apply this to your content?`)
 
   return (
     <DashboardLayout>
-      <div className="h-[calc(100vh-4rem)] flex flex-col">
+      <div className="min-h-[calc(100vh-4rem)] flex flex-col -m-4 sm:-m-6 lg:-m-8">
         {/* Top Bar */}
-        <div className="flex items-center justify-between p-4 border-b border-border-color bg-background/50 backdrop-blur-sm sticky top-0 z-10">
-          <div className="flex items-center space-x-4">
-            <h1 className="text-lg font-bold">Editing: Post #{id}</h1>
-            <span className="text-xs px-2 py-1 bg-yellow-500/10 text-yellow-400 rounded">
-              Draft
-            </span>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-200 bg-white sticky top-0 z-10">
+          <div className="flex items-center gap-3">
+            <Link href="/dashboard/studio" className="btn-icon w-8 h-8">
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
+            <div>
+              <h1 className="text-sm font-semibold text-neutral-900">Editing Post</h1>
+              <div className="flex items-center gap-2 text-xs text-neutral-500">
+                <Clock className="w-3 h-3" />
+                <span>Last saved 2 min ago</span>
+              </div>
+            </div>
+            <span className="badge-warning ml-2">Draft</span>
           </div>
           
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => setShowPreview(true)}
-              className="btn-ghost px-4 py-2"
+              className="btn-secondary py-2 px-3"
             >
-              <Eye className="w-4 h-4 mr-2 inline" />
-              Preview
+              <Eye className="w-4 h-4" />
+              <span className="hidden sm:inline">Preview</span>
             </button>
             
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="btn-secondary px-4 py-2 disabled:opacity-50"
+              className="btn-secondary py-2 px-3 disabled:opacity-50"
             >
               {isSaving ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 inline animate-spin" />
-                  Saving...
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span className="hidden sm:inline">Saving...</span>
                 </>
               ) : (
                 <>
-                  <Save className="w-4 h-4 mr-2 inline" />
-                  Save Draft
+                  <Save className="w-4 h-4" />
+                  <span className="hidden sm:inline">Save</span>
                 </>
               )}
             </button>
@@ -149,17 +166,17 @@ Would you like me to apply this to your content?`)
             <button
               onClick={handlePublish}
               disabled={isPublishing}
-              className="btn-primary px-4 py-2 disabled:opacity-50"
+              className="btn-primary py-2 px-3 disabled:opacity-50"
             >
               {isPublishing ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 inline animate-spin" />
-                  Publishing...
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span className="hidden sm:inline">Publishing...</span>
                 </>
               ) : (
                 <>
-                  <Send className="w-4 h-4 mr-2 inline" />
-                  Publish
+                  <Send className="w-4 h-4" />
+                  <span className="hidden sm:inline">Publish</span>
                 </>
               )}
             </button>
@@ -167,69 +184,69 @@ Would you like me to apply this to your content?`)
         </div>
 
         {/* Three Column Layout */}
-        <div className="flex-1 grid grid-cols-12 gap-0 overflow-hidden">
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
           {/* Left Sidebar - Metadata */}
-          <div className="col-span-3 border-r border-border-color p-6 overflow-y-auto custom-scrollbar bg-surface/30">
-            <div className="space-y-6">
+          <div className="hidden lg:block lg:col-span-3 border-r border-neutral-200 overflow-y-auto bg-white">
+            <div className="p-4 space-y-5">
               {/* Thumbnail */}
               <div>
-                <label className="text-sm font-semibold mb-3 block">Featured Image</label>
-                <div className="aspect-video bg-gradient-to-br from-primary/20 to-purple-500/20 rounded-lg border-2 border-dashed border-border-color hover:border-primary/50 transition-colors cursor-pointer flex items-center justify-center group">
+                <label className="text-xs font-medium text-neutral-700 mb-2 block">Featured Image</label>
+                <div className="aspect-video bg-neutral-100 rounded-lg border-2 border-dashed border-neutral-300 hover:border-red-400 transition-colors cursor-pointer flex items-center justify-center group">
                   <div className="text-center">
-                    <ImageIcon className="w-8 h-8 text-text/30 group-hover:text-primary/50 mx-auto mb-2 transition-colors" />
-                    <p className="text-xs text-text/50">Click to upload</p>
+                    <ImageIcon className="w-6 h-6 text-neutral-400 group-hover:text-red-400 mx-auto mb-1 transition-colors" />
+                    <p className="text-xs text-neutral-500">Click to upload</p>
                   </div>
                 </div>
               </div>
 
               {/* Title */}
               <div>
-                <label className="text-sm font-semibold mb-2 block">Title</label>
+                <label className="text-xs font-medium text-neutral-700 mb-1.5 block">Title</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="input w-full"
+                  className="input text-sm"
                   placeholder="Post title"
                 />
-                <p className="text-xs text-text/50 mt-1">{title.length} characters</p>
+                <p className="text-[10px] text-neutral-400 mt-1">{title.length} characters</p>
               </div>
 
               {/* Slug */}
               <div>
-                <label className="text-sm font-semibold mb-2 block flex items-center space-x-2">
-                  <Link2 className="w-4 h-4" />
+                <label className="text-xs font-medium text-neutral-700 mb-1.5 block flex items-center gap-1.5">
+                  <Link2 className="w-3.5 h-3.5" />
                   <span>URL Slug</span>
                 </label>
                 <input
                   type="text"
                   value={slug}
                   onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
-                  className="input w-full font-mono text-sm"
+                  className="input text-sm font-mono"
                   placeholder="post-url-slug"
                 />
-                <p className="text-xs text-text/50 mt-1">
-                  yoursite.com/<span className="text-primary">{slug}</span>
+                <p className="text-[10px] text-neutral-400 mt-1">
+                  yoursite.com/<span className="text-red-500">{slug}</span>
                 </p>
               </div>
 
               {/* Tags */}
               <div>
-                <label className="text-sm font-semibold mb-2 block flex items-center space-x-2">
-                  <Tag className="w-4 h-4" />
+                <label className="text-xs font-medium text-neutral-700 mb-1.5 block flex items-center gap-1.5">
+                  <Tag className="w-3.5 h-3.5" />
                   <span>Tags</span>
                 </label>
                 
-                <div className="flex flex-wrap gap-2 mb-3">
+                <div className="flex flex-wrap gap-1.5 mb-2">
                   {tags.map((tag, index) => (
                     <div
                       key={index}
-                      className="inline-flex items-center space-x-1 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-sm"
+                      className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-50 border border-red-200 rounded-full text-xs text-red-700"
                     >
                       <span>{tag}</span>
                       <button
                         onClick={() => handleRemoveTag(tag)}
-                        className="hover:text-primary transition-colors"
+                        className="hover:text-red-500 transition-colors"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -237,98 +254,142 @@ Would you like me to apply this to your content?`)
                   ))}
                 </div>
 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-1.5">
                   <input
                     type="text"
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
-                    className="input flex-1 text-sm"
+                    className="input flex-1 text-xs py-1.5"
                     placeholder="Add tag..."
                   />
                   <button
                     onClick={handleAddTag}
-                    className="btn-ghost px-3 py-2"
+                    className="btn-secondary py-1.5 px-2 text-xs"
                   >
                     Add
                   </button>
                 </div>
               </div>
 
-              {/* SEO Score */}
-              <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-green-400">SEO Score</span>
-                  <span className="text-2xl font-bold text-green-400">94/100</span>
+              {/* SEO & Readability Scores */}
+              <div className="space-y-3">
+                {/* SEO Score */}
+                <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-200">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs font-medium text-emerald-700 flex items-center gap-1">
+                      <Target className="w-3.5 h-3.5" />
+                      SEO Score
+                    </span>
+                    <span className="text-lg font-bold text-emerald-600">{seoScore}</span>
+                  </div>
+                  <div className="h-1.5 bg-emerald-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${seoScore}%` }} />
+                  </div>
                 </div>
-                <div className="h-2 bg-surface rounded-full overflow-hidden">
-                  <div className="h-full bg-green-400 w-[94%]" />
+
+                {/* Readability */}
+                <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs font-medium text-blue-700 flex items-center gap-1">
+                      <BarChart3 className="w-3.5 h-3.5" />
+                      Readability
+                    </span>
+                    <span className="text-lg font-bold text-blue-600">{readabilityScore}</span>
+                  </div>
+                  <div className="h-1.5 bg-blue-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500 rounded-full" style={{ width: `${readabilityScore}%` }} />
+                  </div>
                 </div>
-                <p className="text-xs text-text/60 mt-2">
-                  Great! Your post is well-optimized for search engines.
-                </p>
+              </div>
+
+              {/* SEO Checklist */}
+              <div className="p-3 rounded-lg bg-neutral-50 border border-neutral-200">
+                <h4 className="text-xs font-medium text-neutral-700 mb-2">SEO Checklist</h4>
+                <ul className="space-y-1.5 text-xs">
+                  <li className="flex items-center gap-2 text-emerald-600">
+                    <Check className="w-3.5 h-3.5" />
+                    Title contains target keyword
+                  </li>
+                  <li className="flex items-center gap-2 text-emerald-600">
+                    <Check className="w-3.5 h-3.5" />
+                    Meta description optimized
+                  </li>
+                  <li className="flex items-center gap-2 text-emerald-600">
+                    <Check className="w-3.5 h-3.5" />
+                    Headings structure valid
+                  </li>
+                  <li className="flex items-center gap-2 text-amber-600">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    Add more internal links
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
 
           {/* Center - Editor Canvas */}
-          <div className="col-span-6 p-8 overflow-y-auto custom-scrollbar">
-            <div className="max-w-3xl mx-auto">
-              {/* Notion-style Editor */}
-              <div className="space-y-6">
+          <div className="col-span-1 lg:col-span-6 overflow-y-auto bg-neutral-50">
+            <div className="max-w-3xl mx-auto p-6">
+              {/* Visual Editor */}
+              <div className="bg-white rounded-lg border border-neutral-200 shadow-sm p-6">
                 <textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="w-full min-h-[600px] bg-transparent border-none focus:outline-none resize-none text-text/90 leading-relaxed"
+                  className="w-full min-h-[500px] bg-transparent border-none focus:outline-none resize-none text-neutral-800 leading-relaxed"
                   placeholder="Start writing your post..."
                   style={{
-                    fontSize: '16px',
+                    fontSize: '15px',
                     lineHeight: '1.75',
                     fontFamily: 'Inter, system-ui, sans-serif',
                   }}
                 />
               </div>
+
+              {/* Word count */}
+              <div className="flex items-center justify-between mt-4 text-xs text-neutral-500">
+                <span>{content.split(/\s+/).filter(Boolean).length} words</span>
+                <span>~{Math.ceil(content.split(/\s+/).filter(Boolean).length / 200)} min read</span>
+              </div>
             </div>
           </div>
 
           {/* Right Sidebar - AI Copilot */}
-          <div className="col-span-3 border-l border-border-color p-6 overflow-y-auto custom-scrollbar bg-surface/30">
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-primary" />
+          <div className="hidden lg:block lg:col-span-3 border-l border-neutral-200 overflow-y-auto bg-white">
+            <div className="p-4 space-y-5">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-red-600" />
                 </div>
                 <div>
-                  <h3 className="font-bold">AI Copilot</h3>
-                  <p className="text-xs text-text/60">Ask AI to help rewrite</p>
+                  <h3 className="text-sm font-semibold text-neutral-900">AI Copilot</h3>
+                  <p className="text-[10px] text-neutral-500">Ask AI to help improve your writing</p>
                 </div>
               </div>
 
               {/* AI Chat Interface */}
-              <div className="space-y-4">
-                <div>
-                  <textarea
-                    value={aiPrompt}
-                    onChange={(e) => setAiPrompt(e.target.value)}
-                    className="input w-full resize-none"
-                    rows={4}
-                    placeholder="e.g., 'Rewrite the introduction to be more engaging' or 'Make this section more concise'"
-                  />
-                </div>
+              <div className="space-y-3">
+                <textarea
+                  value={aiPrompt}
+                  onChange={(e) => setAiPrompt(e.target.value)}
+                  className="input text-sm resize-none"
+                  rows={3}
+                  placeholder="e.g., 'Rewrite the introduction to be more engaging'"
+                />
 
                 <button
                   onClick={handleAiAssist}
                   disabled={!aiPrompt || isAiThinking}
-                  className="btn-primary w-full disabled:opacity-50"
+                  className="btn-primary w-full py-2 text-sm disabled:opacity-50"
                 >
                   {isAiThinking ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 inline animate-spin" />
-                      AI is thinking...
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Thinking...
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-4 h-4 mr-2 inline" />
+                      <Sparkles className="w-4 h-4" />
                       Ask AI
                     </>
                   )}
@@ -336,18 +397,18 @@ Would you like me to apply this to your content?`)
 
                 {/* AI Response */}
                 {aiResponse && (
-                  <div className="glass rounded-lg p-4 border border-primary/20 bg-primary/5 animate-fade-in">
-                    <div className="flex items-start space-x-2 mb-3">
-                      <Sparkles className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                      <p className="text-sm text-text/80 leading-relaxed whitespace-pre-line">
+                  <div className="p-3 rounded-lg bg-red-50 border border-red-200">
+                    <div className="flex items-start gap-2 mb-2">
+                      <Sparkles className="w-3.5 h-3.5 text-red-500 mt-0.5 flex-shrink-0" />
+                      <p className="text-xs text-neutral-700 leading-relaxed whitespace-pre-line">
                         {aiResponse}
                       </p>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <button className="btn-secondary text-xs px-3 py-1">
-                        Apply Changes
+                    <div className="flex items-center gap-2 mt-3">
+                      <button className="btn-primary py-1 px-2 text-xs">
+                        Apply
                       </button>
-                      <button className="btn-ghost text-xs px-3 py-1">
+                      <button className="btn-secondary py-1 px-2 text-xs">
                         Regenerate
                       </button>
                     </div>
@@ -356,20 +417,35 @@ Would you like me to apply this to your content?`)
               </div>
 
               {/* Quick Actions */}
-              <div className="pt-6 border-t border-border-color">
-                <h4 className="text-sm font-semibold mb-3">Quick Actions</h4>
-                <div className="space-y-2">
-                  <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-surface transition-colors text-sm">
-                    ✨ Improve readability
-                  </button>
-                  <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-surface transition-colors text-sm">
-                    📝 Fix grammar & spelling
-                  </button>
-                  <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-surface transition-colors text-sm">
-                    🎯 Optimize for SEO
-                  </button>
-                  <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-surface transition-colors text-sm">
-                    🔄 Rephrase section
+              <div className="pt-4 border-t border-neutral-200">
+                <h4 className="text-xs font-medium text-neutral-700 mb-2">Quick Actions</h4>
+                <div className="space-y-1">
+                  {[
+                    { emoji: '✨', label: 'Improve readability' },
+                    { emoji: '📝', label: 'Fix grammar & spelling' },
+                    { emoji: '🎯', label: 'Optimize for SEO' },
+                    { emoji: '🔄', label: 'Rephrase section' },
+                    { emoji: '📊', label: 'Add statistics' },
+                  ].map((action, i) => (
+                    <button 
+                      key={i}
+                      className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-neutral-100 transition-colors text-xs text-neutral-700"
+                    >
+                      {action.emoji} {action.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Affiliate Widget */}
+              <div className="pt-4 border-t border-neutral-200">
+                <h4 className="text-xs font-medium text-neutral-700 mb-2">Product Widgets</h4>
+                <div className="p-3 rounded-lg bg-orange-50 border border-orange-200">
+                  <p className="text-xs text-orange-700 mb-2">
+                    <strong>Tip:</strong> Add affiliate product widgets to increase revenue.
+                  </p>
+                  <button className="btn-secondary w-full py-1.5 text-xs justify-center">
+                    + Add Product Widget
                   </button>
                 </div>
               </div>
@@ -379,25 +455,25 @@ Would you like me to apply this to your content?`)
 
         {/* Preview Modal */}
         {showPreview && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-background rounded-2xl border border-border-color max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-xl border border-neutral-200 max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
               {/* Modal Header */}
-              <div className="flex items-center justify-between p-4 border-b border-border-color">
-                <div className="flex items-center space-x-4">
-                  <h3 className="font-bold">Preview</h3>
-                  <div className="flex items-center space-x-2">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-200 bg-neutral-50">
+                <div className="flex items-center gap-4">
+                  <h3 className="text-sm font-semibold text-neutral-900">Preview</h3>
+                  <div className="flex items-center gap-1 bg-white rounded-lg border border-neutral-200 p-0.5">
                     <button
                       onClick={() => setPreviewDevice('mobile')}
-                      className={`p-2 rounded-lg transition-colors ${
-                        previewDevice === 'mobile' ? 'bg-primary text-white' : 'hover:bg-surface'
+                      className={`p-1.5 rounded-md transition-colors ${
+                        previewDevice === 'mobile' ? 'bg-neutral-900 text-white' : 'text-neutral-600 hover:bg-neutral-100'
                       }`}
                     >
                       <Smartphone className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setPreviewDevice('desktop')}
-                      className={`p-2 rounded-lg transition-colors ${
-                        previewDevice === 'desktop' ? 'bg-primary text-white' : 'hover:bg-surface'
+                      className={`p-1.5 rounded-md transition-colors ${
+                        previewDevice === 'desktop' ? 'bg-neutral-900 text-white' : 'text-neutral-600 hover:bg-neutral-100'
                       }`}
                     >
                       <Monitor className="w-4 h-4" />
@@ -406,30 +482,30 @@ Would you like me to apply this to your content?`)
                 </div>
                 <button
                   onClick={() => setShowPreview(false)}
-                  className="btn-ghost p-2"
+                  className="btn-icon w-8 h-8"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4" />
                 </button>
               </div>
 
               {/* Preview Content */}
-              <div className="flex-1 overflow-auto p-8 bg-surface/30">
+              <div className="flex-1 overflow-auto p-6 bg-neutral-100">
                 <div
-                  className={`mx-auto bg-background rounded-lg border border-border-color overflow-hidden transition-all ${
-                    previewDevice === 'mobile' ? 'max-w-sm' : 'max-w-4xl'
+                  className={`mx-auto bg-white rounded-lg border border-neutral-200 shadow-sm overflow-hidden transition-all ${
+                    previewDevice === 'mobile' ? 'max-w-sm' : 'max-w-3xl'
                   }`}
                 >
                   <div className="p-8">
-                    <h1 className="text-4xl font-bold mb-4">{title}</h1>
-                    <div className="flex items-center space-x-3 text-sm text-text/60 mb-8">
+                    <h1 className="text-3xl font-bold text-neutral-900 mb-4">{title}</h1>
+                    <div className="flex items-center gap-3 text-sm text-neutral-500 mb-8">
                       <span>Movie Analysis</span>
                       <span>•</span>
-                      <span>12 min read</span>
+                      <span>{Math.ceil(content.split(/\s+/).filter(Boolean).length / 200)} min read</span>
                       <span>•</span>
                       <span>Feb 3, 2026</span>
                     </div>
-                    <div className="prose prose-invert max-w-none">
-                      <div className="whitespace-pre-line leading-relaxed">
+                    <div className="prose prose-neutral max-w-none">
+                      <div className="whitespace-pre-line leading-relaxed text-neutral-700">
                         {content}
                       </div>
                     </div>

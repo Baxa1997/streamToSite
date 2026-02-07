@@ -2,37 +2,80 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
 import { 
-  LayoutDashboard, 
-  Video, 
-  Palette, 
-  DollarSign, 
+  LayoutGrid, 
+  Globe, 
+  PenTool, 
+  DollarSign,
   Settings,
+  ChevronRight,
+  Home,
+  Plus,
+  Menu,
+  X,
   Sparkles,
   LogOut,
-  Menu,
-  X
+  Crown,
+  Bell,
+  Search
 } from 'lucide-react'
-import { useState } from 'react'
 
-const navigation = [
-  { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Content Studio', href: '/dashboard/studio', icon: Video },
-  { name: 'Site Builder', href: '/dashboard/builder', icon: Palette },
+// Navigation items
+const mainNavigation = [
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutGrid },
+  { name: 'My Sites', href: '/dashboard/sites', icon: Globe },
+  { name: 'Content Studio', href: '/dashboard/studio', icon: PenTool },
   { name: 'Monetization', href: '/dashboard/monetization', icon: DollarSign },
+]
+
+const bottomNavigation = [
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
+
+// Breadcrumb mapping
+const pageTitles = {
+  '/dashboard': 'Dashboard',
+  '/dashboard/sites': 'My Sites',
+  '/dashboard/studio': 'Content Studio',
+  '/dashboard/create': 'Create Content',
+  '/dashboard/monetization': 'Monetization',
+  '/dashboard/settings': 'Settings',
+  '/dashboard/builder': 'Site Builder',
+  '/dashboard/editor': 'Editor',
+}
 
 export default function DashboardLayout({ children }) {
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
+  // Generate breadcrumbs from pathname
+  const generateBreadcrumbs = () => {
+    const segments = pathname.split('/').filter(Boolean)
+    const breadcrumbs = []
+    let currentPath = ''
+    
+    segments.forEach((segment, index) => {
+      currentPath += `/${segment}`
+      const title = pageTitles[currentPath] || segment.charAt(0).toUpperCase() + segment.slice(1)
+      breadcrumbs.push({
+        name: title,
+        href: currentPath,
+        isLast: index === segments.length - 1
+      })
+    })
+    
+    return breadcrumbs
+  }
+
+  const breadcrumbs = generateBreadcrumbs()
+
   return (
-    <div className="min-h-screen gradient-mesh">
+    <div className="min-h-screen bg-neutral-50">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -40,32 +83,55 @@ export default function DashboardLayout({ children }) {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 z-50 h-full w-64 bg-surface border-r border-border-color
-          transform transition-transform duration-300 ease-in-out
+          fixed top-0 left-0 z-50 h-full w-64 sidebar
+          transform transition-transform duration-300 ease-out
           lg:translate-x-0
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         <div className="flex flex-col h-full">
-          {/* Logo */}
-          <div className="flex items-center justify-between p-6 border-b border-border-color">
-            <Link href="/" className="flex items-center space-x-2 group">
-              <div className="bg-gradient-primary p-2 rounded-lg group-hover:scale-110 transition-transform duration-300">
-                <Sparkles className="w-5 h-5 text-white" />
+          {/* Logo Section */}
+          <div className="flex items-center justify-between h-16 px-5 border-b border-neutral-800">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="w-8 h-8 rounded-lg bg-red-500 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <span className="text-lg font-bold text-gradient">StreamToSite</span>
+              <span className="text-lg font-bold text-white">StreamToSite</span>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden btn-ghost p-1"
+              className="lg:hidden btn-dark-ghost p-1.5"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 px-4 py-6 space-y-2 custom-scrollbar overflow-y-auto">
-            {navigation.map((item) => {
+          {/* Main Navigation */}
+          <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto custom-scrollbar custom-scrollbar-dark">
+            <div className="sidebar-section-title">Main Menu</div>
+            {mainNavigation.map((item) => {
+              const isActive = pathname === item.href || 
+                (item.href !== '/dashboard' && pathname.startsWith(item.href))
+              const Icon = item.icon
+              
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setSidebarOpen(false)}
+                  className={`sidebar-nav-item ${isActive ? 'sidebar-nav-item-active' : ''}`}
+                >
+                  <Icon className="w-5 h-5" />
+                  <span>{item.name}</span>
+                </Link>
+              )
+            })}
+          </nav>
+
+          {/* Bottom Section */}
+          <div className="p-3 space-y-3 border-t border-neutral-800">
+            {/* Settings Link */}
+            {bottomNavigation.map((item) => {
               const isActive = pathname === item.href
               const Icon = item.icon
               
@@ -74,66 +140,109 @@ export default function DashboardLayout({ children }) {
                   key={item.name}
                   href={item.href}
                   onClick={() => setSidebarOpen(false)}
-                  className={`
-                    flex items-center space-x-3 px-4 py-3 rounded-lg
-                    transition-all duration-200 group
-                    ${isActive 
-                      ? 'bg-primary text-white shadow-lg shadow-primary/30' 
-                      : 'text-text/70 hover:text-text hover:bg-white/5'
-                    }
-                  `}
+                  className={`sidebar-nav-item ${isActive ? 'sidebar-nav-item-active' : ''}`}
                 >
-                  <Icon className={`w-5 h-5 ${isActive ? '' : 'group-hover:scale-110 transition-transform'}`} />
-                  <span className="font-medium">{item.name}</span>
+                  <Icon className="w-5 h-5" />
+                  <span>{item.name}</span>
                 </Link>
               )
             })}
-          </nav>
 
-          {/* User section */}
-          <div className="p-4 border-t border-border-color">
-            <div className="glass rounded-lg p-4 mb-3">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-white font-bold">
-                  JD
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-text truncate">John Doe</p>
-                  <p className="text-xs text-text/60 truncate">john@example.com</p>
-                </div>
+            {/* Upgrade Banner */}
+            <div className="upgrade-banner">
+              <div className="flex items-center gap-2 mb-1">
+                <Crown className="w-4 h-4" />
+                <span className="upgrade-banner-title">Upgrade to Pro</span>
               </div>
+              <p className="upgrade-banner-text">
+                Unlock unlimited sites & advanced features
+              </p>
+              <button className="upgrade-banner-button">
+                Upgrade Now
+              </button>
             </div>
-            <button className="w-full flex items-center justify-center space-x-2 px-4 py-2 text-text/70 hover:text-text hover:bg-white/5 rounded-lg transition-colors">
-              <LogOut className="w-4 h-4" />
-              <span className="text-sm font-medium">Sign Out</span>
-            </button>
+
+            {/* User Profile */}
+            <div className="flex items-center gap-3 p-3 rounded-lg bg-neutral-900/50 border border-neutral-800">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white text-sm font-semibold">
+                JD
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-neutral-200 truncate">John Doe</p>
+                <p className="text-xs text-neutral-500 truncate">Free Plan</p>
+              </div>
+              <button className="btn-dark-ghost p-1.5 text-neutral-500 hover:text-neutral-300">
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </aside>
 
-      {/* Main content */}
+      {/* Main Content Area */}
       <div className="lg:pl-64">
-        {/* Mobile header */}
-        <header className="lg:hidden sticky top-0 z-30 glass-strong border-b border-white/10 px-4 py-3">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="btn-ghost p-2"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="bg-gradient-primary p-1.5 rounded-lg">
-                <Sparkles className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-lg font-bold text-gradient">StreamToSite</span>
-            </Link>
-            <div className="w-10" /> {/* Spacer for centering */}
+        {/* Top Bar */}
+        <header className="sticky top-0 z-30 topbar">
+          <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+            {/* Left: Mobile menu + Breadcrumbs */}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="lg:hidden btn-dark-ghost p-2"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+              
+              {/* Breadcrumbs */}
+              <nav className="breadcrumb hidden sm:flex">
+                <Link href="/dashboard" className="breadcrumb-item flex items-center gap-1">
+                  <Home className="w-4 h-4" />
+                  <span>Home</span>
+                </Link>
+                {breadcrumbs.map((crumb, index) => (
+                  <div key={crumb.href} className="flex items-center gap-2">
+                    <ChevronRight className="w-4 h-4 breadcrumb-separator" />
+                    {crumb.isLast ? (
+                      <span className="breadcrumb-current">{crumb.name}</span>
+                    ) : (
+                      <Link href={crumb.href} className="breadcrumb-item">
+                        {crumb.name}
+                      </Link>
+                    )}
+                  </div>
+                ))}
+              </nav>
+              
+              {/* Mobile Title */}
+              <h1 className="text-lg font-semibold text-white sm:hidden">
+                {breadcrumbs[breadcrumbs.length - 1]?.name || 'Dashboard'}
+              </h1>
+            </div>
+
+            {/* Right: Actions */}
+            <div className="flex items-center gap-2">
+              {/* Search Button */}
+              <button className="btn-dark-ghost p-2 hidden sm:flex">
+                <Search className="w-5 h-5" />
+              </button>
+              
+              {/* Notifications */}
+              <button className="btn-dark-ghost p-2 relative">
+                <Bell className="w-5 h-5" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
+              </button>
+              
+              {/* Create New Button */}
+              <Link href="/dashboard/create" className="btn-primary">
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">Create New</span>
+              </Link>
+            </div>
           </div>
         </header>
 
-        {/* Page content */}
-        <main className="min-h-screen p-4 sm:p-6 lg:p-8">
+        {/* Page Content */}
+        <main className="content-area p-4 sm:p-6 lg:p-8">
           {children}
         </main>
       </div>
