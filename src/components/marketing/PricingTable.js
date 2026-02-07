@@ -1,74 +1,57 @@
 'use client'
 
-import { Check, X, Sparkles, Zap, Crown } from 'lucide-react'
-import { PLANS, FEATURE_LABELS, getFeatureDisplayValue } from '@/config/plans'
+import { Check, X, Crown, Zap, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
+import { PLANS } from '@/config/plans'
 
 /**
  * PricingTable Component
  * 
  * Displays subscription plans side-by-side with feature comparison.
- * The Pro plan is highlighted with a red border and "Most Popular" badge.
+ * Updated to remove AI Copilot and focus on Revenue Ownership.
  */
 
-// Mock function for Stripe Checkout (replace with actual implementation)
+// Mock function for Stripe Checkout
 const handleUpgrade = async (planId) => {
   console.log(`Initiating Stripe Checkout for plan: ${planId}`)
-  
-  // In production, this would:
-  // 1. Call your backend to create a Stripe Checkout Session
-  // 2. Redirect to Stripe's hosted checkout page
-  // 3. Handle success/cancel webhooks
-  
-  // Mock implementation
-  alert(`Redirecting to Stripe Checkout for ${planId}...\n\nIn production, this would open Stripe's hosted checkout page.`)
-  
-  // Example production code:
-  // const response = await fetch('/api/create-checkout-session', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify({ priceId: PLANS[planId].stripePriceId }),
-  // });
-  // const { url } = await response.json();
-  // window.location.href = url;
+  alert(`Redirecting to Stripe Checkout for ${planId}...\n\nIn production, this would redirect to Stripe.`)
 }
 
-// Feature row component for comparison table
-const FeatureRow = ({ feature, starterValue, proValue, starterIncluded, proIncluded }) => {
-  return (
-    <div className="grid grid-cols-3 gap-4 py-3 border-b border-neutral-800 last:border-b-0">
-      <div className="text-neutral-300 text-sm">{feature}</div>
-      <div className="text-center">
-        {starterIncluded ? (
-          <div className="flex items-center justify-center gap-2">
-            <Check className="w-4 h-4 text-green-400" />
-            <span className="text-neutral-400 text-sm">{starterValue}</span>
-          </div>
-        ) : (
-          <div className="flex items-center justify-center gap-2">
-            <X className="w-4 h-4 text-neutral-600" />
-            <span className="text-neutral-600 text-sm">{starterValue}</span>
-          </div>
-        )}
-      </div>
-      <div className="text-center">
-        {proIncluded ? (
-          <div className="flex items-center justify-center gap-2">
-            <Check className="w-4 h-4 text-red-400" />
-            <span className="text-neutral-300 text-sm">{proValue}</span>
-          </div>
-        ) : (
-          <div className="flex items-center justify-center gap-2">
-            <X className="w-4 h-4 text-neutral-600" />
-            <span className="text-neutral-600 text-sm">{proValue}</span>
-          </div>
-        )}
-      </div>
+// Feature row component
+const FeatureRow = ({ feature, starterValue, proValue, starterIncluded, proIncluded }) => (
+  <div className="grid grid-cols-3 gap-4 py-3 border-b border-neutral-800 last:border-b-0">
+    <div className="text-neutral-300 text-sm">{feature}</div>
+    <div className="text-center">
+      {starterIncluded ? (
+        <div className="flex items-center justify-center gap-2">
+          <Check className="w-4 h-4 text-green-400" />
+          <span className="text-neutral-400 text-sm">{starterValue}</span>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center gap-2">
+          <X className="w-4 h-4 text-neutral-600" />
+          <span className="text-neutral-600 text-sm">{starterValue}</span>
+        </div>
+      )}
     </div>
-  )
-}
+    <div className="text-center">
+      {proIncluded ? (
+        <div className="flex items-center justify-center gap-2">
+          <Check className="w-4 h-4 text-red-400" />
+          <span className="text-neutral-300 text-sm">{proValue}</span>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center gap-2">
+          <X className="w-4 h-4 text-neutral-600" />
+          <span className="text-neutral-600 text-sm">{proValue}</span>
+        </div>
+      )}
+    </div>
+  </div>
+)
 
 // Plan card component
-const PlanCard = ({ plan, onSelect }) => {
+const PlanCard = ({ plan, planKey, onSelect }) => {
   const isHighlighted = plan.ui.highlighted
 
   return (
@@ -115,27 +98,19 @@ const PlanCard = ({ plan, onSelect }) => {
         <li className="flex items-start gap-3">
           <Check className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isHighlighted ? 'text-red-400' : 'text-green-400'}`} />
           <span className="text-neutral-300">
-            {plan.limits.maxPostsPerMonth >= 10000 ? (
-              <><strong className="text-white">Unlimited</strong> blog posts</>
-            ) : (
-              <><strong className="text-white">{plan.limits.maxPostsPerMonth}</strong> blog posts/month</>
-            )}
+            <strong className="text-white">Unlimited</strong> blog posts
           </span>
         </li>
 
-        {/* Custom Domain */}
+        {/* Auto Sync */}
         <li className="flex items-start gap-3">
-          {plan.features.allowCustomDomain ? (
-            <Check className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isHighlighted ? 'text-red-400' : 'text-green-400'}`} />
-          ) : (
-            <X className="w-5 h-5 mt-0.5 flex-shrink-0 text-neutral-600" />
-          )}
-          <span className={plan.features.allowCustomDomain ? 'text-neutral-300' : 'text-neutral-500'}>
-            {plan.features.allowCustomDomain ? 'Custom domain support' : 'yourname.streamtosite.com only'}
+          <Check className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isHighlighted ? 'text-red-400' : 'text-green-400'}`} />
+          <span className="text-neutral-300">
+            Auto-sync <strong className="text-white">{plan.features.autoSync}</strong> YouTube channel{plan.features.autoSync > 1 ? 's' : ''}
           </span>
         </li>
 
-        {/* Monetization */}
+        {/* Monetization - Key differentiator */}
         <li className="flex items-start gap-3">
           {plan.features.monetization === 'user' ? (
             <Check className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isHighlighted ? 'text-red-400' : 'text-green-400'}`} />
@@ -144,9 +119,33 @@ const PlanCard = ({ plan, onSelect }) => {
           )}
           <span className={plan.features.monetization === 'user' ? 'text-neutral-300' : 'text-neutral-500'}>
             {plan.features.monetization === 'user' 
-              ? <><strong className="text-white">Your AdSense</strong> - Keep 100% revenue</>
-              : 'Platform ads (0% for you)'
+              ? <><strong className="text-white">100% Ad Revenue</strong> - yours to keep</>
+              : 'Ad revenue (0% for you)'
             }
+          </span>
+        </li>
+
+        {/* Custom Domain */}
+        <li className="flex items-start gap-3">
+          {plan.features.customDomain ? (
+            <Check className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isHighlighted ? 'text-red-400' : 'text-green-400'}`} />
+          ) : (
+            <X className="w-5 h-5 mt-0.5 flex-shrink-0 text-neutral-600" />
+          )}
+          <span className={plan.features.customDomain ? 'text-neutral-300' : 'text-neutral-500'}>
+            {plan.features.customDomain ? 'Custom domain (yourname.com)' : 'Subdomain only (.streamtosite.com)'}
+          </span>
+        </li>
+
+        {/* Media Tools */}
+        <li className="flex items-start gap-3">
+          {plan.features.mediaTools ? (
+            <Check className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isHighlighted ? 'text-red-400' : 'text-green-400'}`} />
+          ) : (
+            <X className="w-5 h-5 mt-0.5 flex-shrink-0 text-neutral-600" />
+          )}
+          <span className={plan.features.mediaTools ? 'text-neutral-300' : 'text-neutral-500'}>
+            {plan.features.mediaTools ? 'Media Studio (Smart Snapshots)' : 'No media tools'}
           </span>
         </li>
 
@@ -162,89 +161,62 @@ const PlanCard = ({ plan, onSelect }) => {
           </span>
         </li>
 
-        {/* Auto Sync */}
-        <li className="flex items-start gap-3">
-          {plan.features.autoSync ? (
-            <Check className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isHighlighted ? 'text-red-400' : 'text-green-400'}`} />
-          ) : (
-            <X className="w-5 h-5 mt-0.5 flex-shrink-0 text-neutral-600" />
-          )}
-          <span className={plan.features.autoSync ? 'text-neutral-300' : 'text-neutral-500'}>
-            {plan.features.autoSync ? 'Auto-sync new videos daily' : 'Manual URL paste only'}
-          </span>
-        </li>
-
-        {/* Premium Themes */}
-        <li className="flex items-start gap-3">
-          {plan.features.themes.length > 1 ? (
-            <Check className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isHighlighted ? 'text-red-400' : 'text-green-400'}`} />
-          ) : (
-            <X className="w-5 h-5 mt-0.5 flex-shrink-0 text-neutral-600" />
-          )}
-          <span className={plan.features.themes.length > 1 ? 'text-neutral-300' : 'text-neutral-500'}>
-            {plan.features.themes.length > 1 
-              ? <><strong className="text-white">{plan.features.themes.length}</strong> premium themes</>
-              : 'Basic theme only'
-            }
-          </span>
-        </li>
-
         {/* Analytics */}
         <li className="flex items-start gap-3">
-          {plan.features.analytics === 'realtime' ? (
-            <Check className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isHighlighted ? 'text-red-400' : 'text-green-400'}`} />
-          ) : (
-            <X className="w-5 h-5 mt-0.5 flex-shrink-0 text-neutral-600" />
-          )}
-          <span className={plan.features.analytics === 'realtime' ? 'text-neutral-300' : 'text-neutral-500'}>
+          <Check className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isHighlighted ? 'text-red-400' : 'text-green-400'}`} />
+          <span className="text-neutral-300">
             {plan.features.analytics === 'realtime' 
-              ? 'Realtime analytics + 30 day history'
+              ? 'Realtime analytics + 30 days'
               : 'Last 24 hours only'
             }
           </span>
         </li>
 
-        {/* AI Co-Pilot */}
+        {/* Themes */}
         <li className="flex items-start gap-3">
-          {plan.features.aiCoPilot ? (
-            <Check className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isHighlighted ? 'text-red-400' : 'text-green-400'}`} />
-          ) : (
-            <X className="w-5 h-5 mt-0.5 flex-shrink-0 text-neutral-600" />
-          )}
-          <span className={plan.features.aiCoPilot ? 'text-neutral-300' : 'text-neutral-500'}>
-            {plan.features.aiCoPilot ? 'AI Co-Pilot writing assistant' : 'No AI assistance'}
+          <Check className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isHighlighted ? 'text-red-400' : 'text-green-400'}`} />
+          <span className="text-neutral-300">
+            {plan.features.themes.length > 1 
+              ? <><strong className="text-white">{plan.features.themes.length}</strong> premium themes</>
+              : 'Standard theme'
+            }
           </span>
         </li>
       </ul>
 
       {/* CTA Button */}
-      <button
-        onClick={() => onSelect(plan.id === 'creator_pro' ? 'creatorPro' : 'starter')}
-        className={`
-          w-full py-4 px-6 rounded-lg font-semibold text-center transition-all duration-300
-          ${isHighlighted 
-            ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white hover:shadow-lg hover:shadow-red-500/30'
-            : 'bg-neutral-800 hover:bg-neutral-700 text-white'
-          }
-        `}
-      >
-        {plan.ui.ctaText}
-      </button>
+      {plan.price === 0 ? (
+        <Link
+          href="/dashboard"
+          className="w-full py-4 px-6 rounded-lg font-semibold text-center transition-all duration-300 bg-neutral-800 hover:bg-neutral-700 text-white flex items-center justify-center gap-2"
+        >
+          {plan.ui.ctaText}
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      ) : (
+        <button
+          onClick={() => onSelect(planKey)}
+          className="w-full py-4 px-6 rounded-lg font-semibold text-center transition-all duration-300 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white hover:shadow-lg hover:shadow-red-500/30 flex items-center justify-center gap-2"
+        >
+          <Zap className="w-4 h-4" />
+          {plan.ui.ctaText}
+        </button>
+      )}
     </div>
   )
 }
 
 // Main PricingTable component
 export default function PricingTable({ showComparison = false }) {
-  const starter = PLANS.starter
-  const pro = PLANS.creatorPro
+  const free = PLANS.FREE
+  const pro = PLANS.PRO
 
   return (
     <div className="w-full">
       {/* Pricing Cards */}
       <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        <PlanCard plan={starter} onSelect={handleUpgrade} />
-        <PlanCard plan={pro} onSelect={handleUpgrade} />
+        <PlanCard plan={free} planKey="FREE" onSelect={handleUpgrade} />
+        <PlanCard plan={pro} planKey="PRO" onSelect={handleUpgrade} />
       </div>
 
       {/* Feature Comparison Table (Optional) */}
@@ -259,7 +231,7 @@ export default function PricingTable({ showComparison = false }) {
             <div className="grid grid-cols-3 gap-4 pb-4 border-b border-neutral-700 mb-4">
               <div className="text-neutral-500 text-sm font-medium">Feature</div>
               <div className="text-center">
-                <span className="text-white font-semibold">Starter</span>
+                <span className="text-white font-semibold">Growth</span>
                 <span className="text-neutral-500 text-sm block">Free</span>
               </div>
               <div className="text-center">
@@ -271,71 +243,64 @@ export default function PricingTable({ showComparison = false }) {
             {/* Feature Rows */}
             <FeatureRow 
               feature="Blog posts" 
-              starterValue="10/month"
+              starterValue="Unlimited"
               proValue="Unlimited"
               starterIncluded={true}
               proIncluded={true}
             />
             <FeatureRow 
-              feature="Custom domain" 
-              starterValue="Subdomain only"
-              proValue="Your domain"
+              feature="Auto-sync channels" 
+              starterValue="1 channel"
+              proValue="10 channels"
+              starterIncluded={true}
+              proIncluded={true}
+            />
+            <FeatureRow 
+              feature="Ad Revenue" 
+              starterValue="0%"
+              proValue="100% yours"
               starterIncluded={false}
               proIncluded={true}
             />
             <FeatureRow 
-              feature="Monetization" 
-              starterValue="0% revenue"
-              proValue="100% yours"
+              feature="Custom domain" 
+              starterValue="Subdomain only"
+              proValue="yourname.com"
+              starterIncluded={false}
+              proIncluded={true}
+            />
+            <FeatureRow 
+              feature="Media Studio" 
+              starterValue="No"
+              proValue="Smart Snapshots"
               starterIncluded={false}
               proIncluded={true}
             />
             <FeatureRow 
               feature="Remove branding" 
               starterValue="No"
-              proValue="Yes"
+              proValue="White label"
               starterIncluded={false}
               proIncluded={true}
             />
             <FeatureRow 
-              feature="Auto-sync videos" 
+              feature="Email capture" 
               starterValue="No"
-              proValue="Daily"
+              proValue="Newsletter forms"
               starterIncluded={false}
               proIncluded={true}
             />
             <FeatureRow 
-              feature="Premium themes" 
+              feature="Analytics" 
+              starterValue="24 hours"
+              proValue="30 days + Realtime"
+              starterIncluded={true}
+              proIncluded={true}
+            />
+            <FeatureRow 
+              feature="Themes" 
               starterValue="1 theme"
               proValue="4 themes"
-              starterIncluded={false}
-              proIncluded={true}
-            />
-            <FeatureRow 
-              feature="Analytics history" 
-              starterValue="24 hours"
-              proValue="30 days"
-              starterIncluded={true}
-              proIncluded={true}
-            />
-            <FeatureRow 
-              feature="AI Co-Pilot" 
-              starterValue="No"
-              proValue="Yes"
-              starterIncluded={false}
-              proIncluded={true}
-            />
-            <FeatureRow 
-              feature="Max file size" 
-              starterValue="20 MB"
-              proValue="100 MB"
-              starterIncluded={true}
-              proIncluded={true}
-            />
-            <FeatureRow 
-              feature="Video duration" 
-              starterValue="30 min"
-              proValue="60 min"
               starterIncluded={true}
               proIncluded={true}
             />

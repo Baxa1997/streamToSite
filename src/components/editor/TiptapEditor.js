@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState, forwardRef, useImperativeHandle } from 'react'
+import { useCallback, useEffect, useState, forwardRef, useImperativeHandle, useRef } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -299,6 +299,94 @@ const YouTubeModal = ({ isOpen, onClose, onSubmit }) => {
 const ImageModal = ({ isOpen, onClose, onSubmit }) => {
   const [url, setUrl] = useState('')
   const [tab, setTab] = useState('url') // 'url' | 'upload' | 'unsplash'
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadedImage, setUploadedImage] = useState(null)
+  const [dragActive, setDragActive] = useState(false)
+  const fileInputRef = useRef(null)
+
+  // Reset state when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setUrl('')
+      setUploadedImage(null)
+      setIsUploading(false)
+      setTab('url')
+    }
+  }, [isOpen])
+
+  // Handle file selection
+  const handleFile = async (file) => {
+    if (!file) return
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file (PNG, JPG, GIF, WebP)')
+      return
+    }
+
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File size must be less than 10MB')
+      return
+    }
+
+    setIsUploading(true)
+
+    try {
+      // Convert to base64 for local preview/insertion
+      // In production, you would upload to a cloud storage (S3, Cloudinary, etc.)
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setUploadedImage(e.target.result)
+        setIsUploading(false)
+      }
+      reader.onerror = () => {
+        alert('Failed to read file')
+        setIsUploading(false)
+      }
+      reader.readAsDataURL(file)
+    } catch (error) {
+      console.error('Upload error:', error)
+      alert('Failed to process image')
+      setIsUploading(false)
+    }
+  }
+
+  // Handle file input change
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0]
+    if (file) handleFile(file)
+  }
+
+  // Handle drag and drop
+  const handleDrag = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true)
+    } else if (e.type === 'dragleave') {
+      setDragActive(false)
+    }
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragActive(false)
+    
+    const file = e.dataTransfer?.files?.[0]
+    if (file) handleFile(file)
+  }
+
+  // Handle insert
+  const handleInsert = () => {
+    if (tab === 'url' && url) {
+      onSubmit(url)
+    } else if (tab === 'upload' && uploadedImage) {
+      onSubmit(uploadedImage)
+    }
+    onClose()
+  }
 
   if (!isOpen) return null
 
@@ -332,21 +420,84 @@ const ImageModal = ({ isOpen, onClose, onSubmit }) => {
         </div>
 
         {tab === 'url' && (
-          <input
-            type="url"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="https://example.com/image.jpg"
-            className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 mb-4"
-            autoFocus
-          />
+          <div className="mb-4">
+            <input
+              type="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="https://example.com/image.jpg"
+              className="w-full px-3 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500"
+              autoFocus
+            />
+            {url && (
+              <div className="mt-3 p-2 bg-neutral-50 rounded-lg">
+                <img 
+                  src={url} 
+                  alt="Preview" 
+                  className="w-full h-32 object-cover rounded-lg"
+                  onError={(e) => e.target.style.display = 'none'}
+                />
+              </div>
+            )}
+          </div>
         )}
 
         {tab === 'upload' && (
-          <div className="border-2 border-dashed border-neutral-300 rounded-xl p-8 text-center mb-4 hover:border-red-400 transition-colors cursor-pointer">
-            <ImageIcon className="w-10 h-10 text-neutral-400 mx-auto mb-2" />
-            <p className="text-sm text-neutral-600 mb-1">Click to upload or drag and drop</p>
-            <p className="text-xs text-neutral-400">PNG, JPG, GIF up to 10MB</p>
+          <div className="mb-4">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            
+            {!uploadedImage ? (
+              <div 
+                className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer ${
+                  dragActive 
+                    ? 'border-red-500 bg-red-50' 
+                    : 'border-neutral-300 hover:border-red-400'
+                }`}
+                onClick={() => fileInputRef.current?.click()}
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+              >
+                {isUploading ? (
+                  <>
+                    <div className="w-10 h-10 border-2 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                    <p className="text-sm text-neutral-600">Processing...</p>
+                  </>
+                ) : (
+                  <>
+                    <ImageIcon className="w-10 h-10 text-neutral-400 mx-auto mb-2" />
+                    <p className="text-sm text-neutral-600 mb-1">
+                      {dragActive ? 'Drop image here' : 'Click to upload or drag and drop'}
+                    </p>
+                    <p className="text-xs text-neutral-400">PNG, JPG, GIF, WebP up to 10MB</p>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="relative">
+                <img 
+                  src={uploadedImage} 
+                  alt="Uploaded" 
+                  className="w-full h-48 object-cover rounded-xl" 
+                />
+                <button
+                  onClick={() => setUploadedImage(null)}
+                  className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-black/70 rounded-lg transition-colors"
+                >
+                  <X className="w-4 h-4 text-white" />
+                </button>
+                <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/50 rounded text-xs text-white">
+                  Ready to insert
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -362,6 +513,9 @@ const ImageModal = ({ isOpen, onClose, onSubmit }) => {
                 <div key={i} className="aspect-square bg-neutral-200 rounded-lg animate-pulse" />
               ))}
             </div>
+            <p className="text-xs text-neutral-400 text-center">
+              Unsplash integration coming soon
+            </p>
           </div>
         )}
 
@@ -373,15 +527,11 @@ const ImageModal = ({ isOpen, onClose, onSubmit }) => {
             Cancel
           </button>
           <button 
-            onClick={() => {
-              if (url) onSubmit(url)
-              setUrl('')
-              onClose()
-            }}
-            disabled={tab === 'url' && !url}
-            className="px-4 py-2 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors disabled:opacity-50"
+            onClick={handleInsert}
+            disabled={(tab === 'url' && !url) || (tab === 'upload' && !uploadedImage) || tab === 'unsplash'}
+            className="px-4 py-2 text-sm bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Insert
+            Insert Image
           </button>
         </div>
       </div>

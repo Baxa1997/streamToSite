@@ -1,178 +1,110 @@
 /**
  * StreamToSite Plan Configuration
  * 
- * This file defines the feature gating logic for all subscription plans.
- * Modify limits here to adjust plan capabilities across the entire application.
+ * PRIMARY GOALS:
+ * - GROWTH Plan: High engagement, unlimited content creation
+ * - BUSINESS Plan: Revenue ownership, full control
+ * 
+ * REMOVED: AI Copilot feature is no longer part of any plan.
  */
 
 export const PLANS = {
   // ============================================
-  // PLAN A: STARTER (Free Tier)
-  // Goal: Acquisition - Get users hooked on the product
+  // FREE TIER: GROWTH
+  // Goal: Engagement - Get users creating lots of content
   // ============================================
-  starter: {
-    id: 'starter',
-    name: 'Starter',
-    description: 'Perfect for trying out StreamToSite',
+  FREE: {
+    id: 'growth',
+    name: 'Growth',
+    label: 'Growth',
+    description: 'Build Your Audience',
     price: 0,
     priceDisplay: '$0',
     billingPeriod: 'forever',
-    stripePriceId: null, // Free tier, no Stripe price
+    stripePriceId: null,
 
     limits: {
-      maxSites: 1,
-      maxPostsPerMonth: 10,
-      maxFileSizeMB: 20,
-      maxVideoDurationMinutes: 30,
+      sites: 1,
+      posts: 'UNLIMITED', // Critical for engagement
     },
 
     features: {
-      // Domain & Branding
-      allowCustomDomain: false, // Must use .streamtosite.com subdomain
+      autoSync: 1, // 1 YouTube channel auto-sync
+      monetization: 'platform', // We inject OUR AdSense. User gets 0%.
+      customDomain: false, // Must use .streamtosite.com subdomain
       removeBranding: false, // Footer shows "Powered by StreamToSite"
-      
-      // Monetization
-      monetization: 'platform', // We inject OUR AdSense, user gets 0%
-      
-      // Automation
-      autoSync: false, // Manual URL paste only
-      
-      // Themes & Customization
-      themes: ['standard'], // Only basic dark theme
-      
-      // Analytics
-      analytics: '24h', // Only last 24 hours of data
-      analyticsHistoryDays: 1,
-      
-      // Support
-      prioritySupport: false,
-      
-      // AI Features
-      aiCoPilot: false,
+      analytics: '24h', // Only last 24 hours
+      themes: ['standard'], // Basic theme only
+      mediaTools: false, // No "Smart Snapshots" in editor
+      emailCapture: false,
+      prioritySeo: false,
     },
 
-    // UI Display Configuration
     ui: {
       badge: null,
       highlighted: false,
-      ctaText: 'Get Started Free',
+      ctaText: 'Start Free',
       ctaVariant: 'secondary',
+      headline: 'Build Your Audience.',
     }
   },
 
   // ============================================
-  // PLAN B: CREATOR PRO ($29/month)
-  // Goal: Monetization & Business Use
+  // PAID TIER: BUSINESS ($29/month)
+  // Goal: Revenue ownership - User keeps 100%
   // ============================================
-  creatorPro: {
-    id: 'creator_pro',
+  PRO: {
+    id: 'business',
     name: 'Creator Pro',
-    description: 'For serious content creators who want to monetize',
+    label: 'Business',
+    description: 'Own Your Income',
     price: 29,
     priceDisplay: '$29',
     billingPeriod: 'month',
-    stripePriceId: 'price_creator_pro_monthly', // Replace with actual Stripe Price ID
+    stripePriceId: 'price_creator_pro_monthly',
 
     limits: {
-      maxSites: 1, // Upsell to Agency for more
-      maxPostsPerMonth: 10000, // Effectively unlimited
-      maxFileSizeMB: 100,
-      maxVideoDurationMinutes: 60,
+      sites: 3,
+      posts: 'UNLIMITED',
     },
 
     features: {
-      // Domain & Branding
-      allowCustomDomain: true, // User can connect www.movieking.com
-      removeBranding: true, // White label - no "Powered by" footer
-      
-      // Monetization
-      monetization: 'user', // User inputs THEIR AdSense/Affiliate IDs, gets 100%
-      
-      // Automation
-      autoSync: true, // Background job fetches new videos daily
-      
-      // Themes & Customization
+      autoSync: 10, // 10 YouTube channels auto-sync
+      monetization: 'user', // User enters THEIR AdSense/Affiliate IDs. 100% theirs.
+      customDomain: true, // Connect www.yourname.com
+      removeBranding: true, // White label
+      analytics: 'realtime', // 30-day history + live view
       themes: ['standard', 'cinema', 'newspaper', 'minimal'],
-      
-      // Analytics
-      analytics: 'realtime', // Live view + 30 day history
-      analyticsHistoryDays: 30,
-      
-      // Support
-      prioritySupport: true,
-      
-      // AI Features
-      aiCoPilot: true,
+      mediaTools: true, // Video Player & Snapshot tools in Editor
+      emailCapture: true, // Newsletter signup forms
+      prioritySeo: true, // Priority search indexing
     },
 
-    // UI Display Configuration
     ui: {
       badge: 'Most Popular',
       highlighted: true,
-      ctaText: 'Start Pro Trial',
+      ctaText: 'Go Pro - $29/mo',
       ctaVariant: 'primary',
+      headline: 'Own Your Income.',
     }
   },
 };
 
 // ============================================
-// FEATURE DEFINITIONS
-// Maps feature keys to human-readable labels
+// FEATURE LABELS
 // ============================================
 export const FEATURE_LABELS = {
-  maxSites: 'Number of sites',
-  maxPostsPerMonth: 'Blog posts per month',
-  maxFileSizeMB: 'Max file size',
-  maxVideoDurationMinutes: 'Max video duration',
-  allowCustomDomain: 'Custom domain',
-  removeBranding: 'Remove branding',
-  monetization: 'Monetization',
-  autoSync: 'Auto-sync new videos',
-  themes: 'Premium themes',
+  sites: 'Number of sites',
+  posts: 'Blog posts',
+  autoSync: 'Auto-sync channels',
+  monetization: 'Ad revenue',
+  customDomain: 'Custom domain',
+  removeBranding: 'White label',
   analytics: 'Analytics',
-  prioritySupport: 'Priority support',
-  aiCoPilot: 'AI Co-Pilot assistant',
-};
-
-// ============================================
-// FEATURE DISPLAY VALUES
-// How to display feature values in the UI
-// ============================================
-export const getFeatureDisplayValue = (planId, featureKey) => {
-  const plan = PLANS[planId];
-  if (!plan) return null;
-
-  const limits = plan.limits;
-  const features = plan.features;
-
-  switch (featureKey) {
-    case 'maxSites':
-      return `${limits.maxSites} site${limits.maxSites > 1 ? 's' : ''}`;
-    case 'maxPostsPerMonth':
-      return limits.maxPostsPerMonth >= 10000 ? 'Unlimited' : `${limits.maxPostsPerMonth}/month`;
-    case 'maxFileSizeMB':
-      return `Up to ${limits.maxFileSizeMB} MB`;
-    case 'maxVideoDurationMinutes':
-      return `Up to ${limits.maxVideoDurationMinutes} min`;
-    case 'allowCustomDomain':
-      return features.allowCustomDomain ? 'Yes' : 'yourname.streamtosite.com only';
-    case 'removeBranding':
-      return features.removeBranding ? 'White label' : '"Powered by StreamToSite" footer';
-    case 'monetization':
-      return features.monetization === 'user' ? 'Your AdSense (100% yours)' : 'Platform ads (0% for you)';
-    case 'autoSync':
-      return features.autoSync ? 'Daily auto-sync' : 'Manual paste only';
-    case 'themes':
-      return features.themes.length > 1 ? `${features.themes.length} premium themes` : 'Basic theme only';
-    case 'analytics':
-      return features.analytics === 'realtime' ? 'Realtime + 30 day history' : 'Last 24 hours only';
-    case 'prioritySupport':
-      return features.prioritySupport ? '24/7 priority support' : 'Community support';
-    case 'aiCoPilot':
-      return features.aiCoPilot ? 'Included' : 'Not available';
-    default:
-      return null;
-  }
+  themes: 'Themes',
+  mediaTools: 'Media Studio',
+  emailCapture: 'Email capture',
+  prioritySeo: 'Priority SEO',
 };
 
 // ============================================
@@ -183,33 +115,56 @@ export const getFeatureDisplayValue = (planId, featureKey) => {
  * Get plan by ID
  */
 export const getPlanById = (planId) => {
-  return Object.values(PLANS).find(plan => plan.id === planId) || PLANS.starter;
+  if (planId === 'growth' || planId === 'starter' || planId === 'free') {
+    return PLANS.FREE;
+  }
+  if (planId === 'business' || planId === 'pro' || planId === 'creator_pro') {
+    return PLANS.PRO;
+  }
+  return PLANS.FREE;
+};
+
+/**
+ * Get plan key (FREE or PRO)
+ */
+export const getPlanKey = (planId) => {
+  if (planId === 'growth' || planId === 'starter' || planId === 'free') {
+    return 'FREE';
+  }
+  if (planId === 'business' || planId === 'pro' || planId === 'creator_pro') {
+    return 'PRO';
+  }
+  return 'FREE';
 };
 
 /**
  * Check if a user has access to a specific feature
  */
-export const hasFeatureAccess = (userPlan, featureKey) => {
-  const plan = PLANS[userPlan] || PLANS.starter;
+export const hasFeatureAccess = (userPlanId, featureKey) => {
+  const plan = getPlanById(userPlanId);
   const features = plan.features;
-  
+
   switch (featureKey) {
     case 'customDomain':
-      return features.allowCustomDomain;
+      return features.customDomain;
     case 'removeBranding':
       return features.removeBranding;
     case 'userMonetization':
       return features.monetization === 'user';
     case 'autoSync':
-      return features.autoSync;
+      return features.autoSync > 0;
+    case 'multiChannelSync':
+      return features.autoSync > 1;
     case 'premiumThemes':
       return features.themes.length > 1;
     case 'realtimeAnalytics':
       return features.analytics === 'realtime';
-    case 'prioritySupport':
-      return features.prioritySupport;
-    case 'aiCoPilot':
-      return features.aiCoPilot;
+    case 'mediaTools':
+      return features.mediaTools;
+    case 'emailCapture':
+      return features.emailCapture;
+    case 'prioritySeo':
+      return features.prioritySeo;
     default:
       return false;
   }
@@ -218,23 +173,64 @@ export const hasFeatureAccess = (userPlan, featureKey) => {
 /**
  * Check if user is within their limits
  */
-export const isWithinLimit = (userPlan, limitKey, currentValue) => {
-  const plan = PLANS[userPlan] || PLANS.starter;
+export const isWithinLimit = (userPlanId, limitKey, currentValue) => {
+  const plan = getPlanById(userPlanId);
   const limit = plan.limits[limitKey];
-  
+
   if (limit === undefined) return true;
-  if (limit >= 10000) return true; // Effectively unlimited
-  
+  if (limit === 'UNLIMITED') return true;
+
   return currentValue < limit;
 };
 
 /**
  * Get the limit value for a plan
  */
-export const getLimit = (userPlan, limitKey) => {
-  const plan = PLANS[userPlan] || PLANS.starter;
+export const getLimit = (userPlanId, limitKey) => {
+  const plan = getPlanById(userPlanId);
   return plan.limits[limitKey];
 };
 
-// Default export
+/**
+ * Get display value for a feature
+ */
+export const getFeatureDisplayValue = (planKey, featureKey) => {
+  const plan = PLANS[planKey];
+  if (!plan) return null;
+
+  const features = plan.features;
+  const limits = plan.limits;
+
+  switch (featureKey) {
+    case 'sites':
+      return limits.sites === 1 ? '1 site' : `${limits.sites} sites`;
+    case 'posts':
+      return limits.posts === 'UNLIMITED' ? 'Unlimited' : `${limits.posts}/month`;
+    case 'autoSync':
+      return features.autoSync === 0 ? 'None' : `${features.autoSync} channel${features.autoSync > 1 ? 's' : ''}`;
+    case 'monetization':
+      return features.monetization === 'user' ? '100% yours' : '0% for you';
+    case 'customDomain':
+      return features.customDomain ? 'Connect your .com' : 'Subdomain only';
+    case 'removeBranding':
+      return features.removeBranding ? 'White label' : 'StreamToSite branding';
+    case 'analytics':
+      return features.analytics === 'realtime' ? 'Realtime + 30 days' : 'Last 24 hours';
+    case 'themes':
+      return `${features.themes.length} theme${features.themes.length > 1 ? 's' : ''}`;
+    case 'mediaTools':
+      return features.mediaTools ? 'Full access' : 'Not available';
+    case 'emailCapture':
+      return features.emailCapture ? 'Included' : 'Not available';
+    case 'prioritySeo':
+      return features.prioritySeo ? 'Priority indexing' : 'Standard';
+    default:
+      return null;
+  }
+};
+
+// Backward compatibility exports
+export const starter = PLANS.FREE;
+export const creatorPro = PLANS.PRO;
+
 export default PLANS;
