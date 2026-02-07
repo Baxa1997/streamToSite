@@ -20,6 +20,8 @@ import {
   Bell,
   Search
 } from 'lucide-react'
+import useAppStore from '@/store/useAppStore'
+import CreateSiteWizard from '@/components/onboarding/CreateSiteWizard'
 
 // Navigation items
 const mainNavigation = [
@@ -48,6 +50,7 @@ const pageTitles = {
 export default function DashboardLayout({ children }) {
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const { user, openWizard, upgradePlan } = useAppStore()
 
   // Generate breadcrumbs from pathname
   const generateBreadcrumbs = () => {
@@ -157,7 +160,10 @@ export default function DashboardLayout({ children }) {
               <p className="upgrade-banner-text">
                 Unlock unlimited sites & advanced features
               </p>
-              <button className="upgrade-banner-button">
+              <button 
+                onClick={upgradePlan}
+                className="upgrade-banner-button"
+              >
                 Upgrade Now
               </button>
             </div>
@@ -165,11 +171,11 @@ export default function DashboardLayout({ children }) {
             {/* User Profile */}
             <div className="flex items-center gap-3 p-3 rounded-lg bg-neutral-900/50 border border-neutral-800">
               <div className="w-9 h-9 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white text-sm font-semibold">
-                JD
+                {user?.name?.charAt(0) || 'U'}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-neutral-200 truncate">John Doe</p>
-                <p className="text-xs text-neutral-500 truncate">Free Plan</p>
+                <p className="text-sm font-medium text-neutral-200 truncate">{user?.name || 'User'}</p>
+                <p className="text-xs text-neutral-500 truncate capitalize">{user?.plan || 'Free'} Plan</p>
               </div>
               <button className="btn-dark-ghost p-1.5 text-neutral-500 hover:text-neutral-300">
                 <LogOut className="w-4 h-4" />
@@ -233,10 +239,10 @@ export default function DashboardLayout({ children }) {
               </button>
               
               {/* Create New Button */}
-              <Link href="/dashboard/create" className="btn-primary">
+              <button onClick={openWizard} className="btn-primary">
                 <Plus className="w-4 h-4" />
                 <span className="hidden sm:inline">Create New</span>
-              </Link>
+              </button>
             </div>
           </div>
         </header>
@@ -245,6 +251,9 @@ export default function DashboardLayout({ children }) {
         <main className="content-area p-4 sm:p-6 lg:p-8">
           {children}
         </main>
+
+        {/* Global Create Site Wizard */}
+        <CreateSiteWizard />
       </div>
     </div>
   )

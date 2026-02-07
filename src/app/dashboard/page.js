@@ -263,6 +263,8 @@ export default function DashboardPage() {
           </div>
           <Link
             href="/examples/demo"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white font-medium rounded-lg transition-colors shadow-lg"
           >
             <Eye className="w-4 h-4" />

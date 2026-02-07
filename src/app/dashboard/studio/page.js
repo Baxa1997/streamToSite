@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import DashboardLayout from '@/components/DashboardLayout'
+import CreatePostModal from '@/components/studio/CreatePostModal'
 import { 
   Plus,
   Sparkles,
@@ -240,6 +241,7 @@ export default function StudioPage() {
   const [viewMode, setViewMode] = useState('list')
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
+  const [showCreateModal, setShowCreateModal] = useState(false)
   
   // Filter content
   const filteredContent = contentData.filter(content => {
@@ -261,10 +263,13 @@ export default function StudioPage() {
               Manage and create your blog posts
             </p>
           </div>
-          <Link href="/dashboard/create" className="btn-primary">
+          <button 
+            onClick={() => setShowCreateModal(true)}
+            className="btn-primary"
+          >
             <Plus className="w-4 h-4" />
             Create Content
-          </Link>
+          </button>
         </div>
 
         {/* Tabs Navigation */}
@@ -382,13 +387,22 @@ export default function StudioPage() {
             <p className="text-neutral-500 mb-6">
               {searchQuery ? 'Try adjusting your search or filters' : 'Start creating your first blog post'}
             </p>
-            <Link href="/dashboard/create" className="btn-primary">
+            <button 
+              onClick={() => setShowCreateModal(true)}
+              className="btn-primary"
+            >
               <Plus className="w-4 h-4" />
               Create Content
-            </Link>
+            </button>
           </div>
         )}
       </div>
+
+      {/* Create Post Modal */}
+      <CreatePostModal 
+        isOpen={showCreateModal} 
+        onClose={() => setShowCreateModal(false)} 
+      />
     </DashboardLayout>
   )
 }
