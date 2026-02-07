@@ -17,7 +17,8 @@ import {
   User,
   ExternalLink,
   Edit3,
-  CheckCircle2
+  CheckCircle2,
+  Play
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -251,13 +252,23 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="space-y-8">
         {/* Page Header */}
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">
-            Welcome back, <span className="text-gradient-red">John</span>
-          </h1>
-          <p className="text-neutral-500 mt-1">
-            Here's what's happening with your content empire today
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">
+              Welcome back, <span className="text-gradient-red">John</span>
+            </h1>
+            <p className="text-neutral-500 mt-1">
+              Here's what's happening with your content empire today
+            </p>
+          </div>
+          <Link
+            href="/examples/demo"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white font-medium rounded-lg transition-colors shadow-lg"
+          >
+            <Eye className="w-4 h-4" />
+            Preview Site
+            <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+          </Link>
         </div>
 
         {/* Stats Grid */}

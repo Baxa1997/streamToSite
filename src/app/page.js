@@ -161,8 +161,9 @@ export default function LandingPage() {
                 Start Building Free
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
-              <Link href="#examples" className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 text-white font-semibold text-lg px-8 py-4 rounded-lg transition-all duration-300 hover:scale-105 w-full sm:w-auto text-center">
-                See Examples
+              <Link href="/examples/demo" className="bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 text-white font-semibold text-lg px-8 py-4 rounded-lg transition-all duration-300 hover:scale-105 w-full sm:w-auto flex items-center justify-center gap-2">
+                <Play className="w-5 h-5" />
+                See Live Demo
               </Link>
             </div>
 
