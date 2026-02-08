@@ -4,7 +4,6 @@ import { useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   X, 
-  Youtube, 
   Link2, 
   ArrowRight, 
   ArrowLeft,
@@ -14,10 +13,8 @@ import {
   CheckCircle2,
   ChevronDown,
   Sparkles,
-  ExternalLink,
   Video,
   Globe,
-  Plus
 } from 'lucide-react'
 import useAppStore from '@/store/useAppStore'
 

@@ -151,6 +151,12 @@ const useAppStore = create(
             revenue: 0,
           },
           connectedChannel: channel, // For backwards compatibility
+          
+          // ========== BACKEND FIELDS ==========
+          owner_id: state.user.id,
+          sub_domain: channel.name.toLowerCase().replace(/\s+/g, ''),
+          custom_domain: null,
+          branding_enabled: state.user.plan === 'pro', // Only Pros can remove branding
         }
 
         set((state) => ({
@@ -253,6 +259,12 @@ const useAppStore = create(
             category: channelData.category,
             tags: channelData.tags,
           },
+          
+          // ========== BACKEND FIELDS ==========
+          owner_id: state.user.id,
+          sub_domain: (channelData.channelName || channelData.name || 'mysite').toLowerCase().replace(/\s+/g, ''),
+          custom_domain: null,
+          branding_enabled: state.user.plan === 'pro', // Only Pros can remove branding
         }
 
         set((state) => ({
@@ -414,6 +426,12 @@ const useAppStore = create(
         const newPost = {
           id: generateId('post_'),
           ...postData,
+          
+          // ========== BACKEND FIELDS ==========
+          platform: postData.platform || 'youtube', // Default to YouTube
+          original_video_url: postData.videoUrl || null,
+          content_json: null, // Placeholder for Tiptap JSON
+          
           status: 'draft',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),

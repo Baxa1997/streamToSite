@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import useAppStore from '@/store/useAppStore'
 import { EditorLayout, TiptapEditor, MediaSidebar, OutlineSidebar } from '@/components/editor'
@@ -46,7 +46,8 @@ const MOCK_SCREENSHOTS = [
 export default function EditorPage() {
   const params = useParams()
   const router = useRouter()
-  const { posts, sites, updatePost, publishPost, addPost, generateMockPost, addToast, user } = useAppStore()
+  const searchParams = useSearchParams()
+  const { posts, sites, updatePost, publishPost, addPost, generateMockPost, addToast, detectPlatform, user } = useAppStore()
   const editorRef = useRef(null)
 
   const [post, setPost] = useState(null)
@@ -71,6 +72,8 @@ export default function EditorPage() {
   useEffect(() => {
     const postId = params.id
     const existingPost = posts.find(p => p.id === postId)
+    const videoParam = searchParams.get('video')
+    const siteParam = searchParams.get('site')
     
     // Get site - either from post or use first available or create a mock
     let targetSite = null
@@ -89,14 +92,15 @@ export default function EditorPage() {
       // Create a new post
       const mockPost = {
         id: postId === 'new' ? `new_${Date.now()}` : postId,
-        title: 'Untitled Post',
+        title: videoParam ? `New Post from Video ${videoParam}` : 'Untitled Post',
         content: '<p>Start writing your amazing content here...</p>',
-        thumbnail: MOCK_FRAMES[0],
-        videoUrl: 'https://youtube.com/watch?v=demo',
+        thumbnail: videoParam ? `https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800&h=450&fit=crop&q=${videoParam}` : MOCK_FRAMES[0],
+        videoUrl: videoParam ? `https://youtube.com/watch?v=${videoParam}` : 'https://youtube.com/watch?v=demo',
         status: 'draft',
         slug: 'untitled-post',
         author: user?.name || 'Anonymous',
         tags: ['Review'],
+        platform: videoParam ? detectPlatform(`https://youtube.com/watch?v=${videoParam}`) : 'youtube', // Simplified detection or default
       }
       setPost(mockPost)
       setTitle(mockPost.title)
@@ -106,7 +110,13 @@ export default function EditorPage() {
       setPublishDate(new Date().toISOString().split('T')[0])
       setAuthor(mockPost.author)
       setTags(mockPost.tags)
-      targetSite = sites[0] // Take first site if available
+      
+      // Use query param site if available, otherwise fallback
+      if (siteParam) {
+        targetSite = sites.find(s => s.id === siteParam)
+      } else {
+        targetSite = sites[0] // Take first site if available
+      }
     }
     
     // If we still don't have a site, create a mock one for the editor to work
@@ -121,12 +131,12 @@ export default function EditorPage() {
           avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Demo',
         }
       }
-    } else if (!targetSite) {
+    } else if (!targetSite && !siteParam) { // Only fallback to sites[0] if siteParam wasn't specified or didn't yield a site
       targetSite = sites[0]
     }
     
     setSite(targetSite)
-  }, [params.id, posts, sites, user])
+  }, [params.id, posts, sites, user, searchParams])
 
 
 

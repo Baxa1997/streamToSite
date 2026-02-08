@@ -21,7 +21,9 @@ import {
   Sparkles,
   ArrowRight,
   ExternalLink,
-  Zap
+  Zap,
+  Facebook,
+  Video
 } from 'lucide-react'
 
 // Mock posts for demo
@@ -97,6 +99,12 @@ const formatNumber = (num) => {
 
 // Post Card Component
 const PostCard = ({ post, variant = 'default' }) => {
+  const PlatformIcon = {
+    youtube: Youtube,
+    facebook: Facebook,
+    tiktok: Video,
+  }[post.platform?.toLowerCase()] || Video
+
   if (variant === 'featured') {
     return (
       <motion.article
@@ -112,9 +120,16 @@ const PostCard = ({ post, variant = 'default' }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
         
         <div className="absolute bottom-0 left-0 right-0 p-8">
-          <span className="inline-block px-3 py-1 bg-red-500 text-white text-xs font-bold uppercase tracking-wide rounded-full mb-4">
-            {post.category}
-          </span>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="inline-block px-3 py-1 bg-red-500 text-white text-xs font-bold uppercase tracking-wide rounded-full">
+              {post.category}
+            </span>
+            {/* Platform Badge */}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 backdrop-blur-md text-white text-xs font-medium rounded-full border border-white/20">
+              <PlatformIcon className="w-3 h-3" />
+              <span className="capitalize">{post.platform || 'Video'}</span>
+            </span>
+          </div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-3 line-clamp-2">
             {post.title}
           </h2>
@@ -160,9 +175,14 @@ const PostCard = ({ post, variant = 'default' }) => {
             <Play className="w-6 h-6 text-neutral-900 ml-1" />
           </div>
         </div>
-        <span className="absolute top-3 left-3 px-2 py-1 bg-black/70 backdrop-blur-sm text-white text-xs font-medium rounded-md">
-          {post.category}
-        </span>
+        <div className="absolute top-3 left-3 flex gap-2">
+          <span className="px-2 py-1 bg-black/70 backdrop-blur-sm text-white text-xs font-medium rounded-md">
+            {post.category}
+          </span>
+          <span className="flex items-center gap-1 px-2 py-1 bg-black/70 backdrop-blur-sm text-white text-xs font-medium rounded-md">
+            <PlatformIcon className="w-3 h-3" />
+          </span>
+        </div>
         <span className="absolute bottom-3 right-3 px-2 py-1 bg-black/70 backdrop-blur-sm text-white text-xs rounded-md flex items-center gap-1">
           <Clock className="w-3 h-3" />
           {post.readTime} min
