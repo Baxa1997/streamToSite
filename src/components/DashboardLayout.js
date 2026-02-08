@@ -21,7 +21,6 @@ import {
   Search
 } from 'lucide-react'
 import useAppStore from '@/store/useAppStore'
-import CreateSiteWizard from '@/components/onboarding/CreateSiteWizard'
 
 // Navigation items
 const mainNavigation = [
@@ -50,7 +49,7 @@ const pageTitles = {
 export default function DashboardLayout({ children }) {
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { user, openWizard, upgradePlan } = useAppStore()
+  const { user, upgradePlan } = useAppStore()
 
   // Generate breadcrumbs from pathname
   const generateBreadcrumbs = () => {
@@ -239,10 +238,10 @@ export default function DashboardLayout({ children }) {
               </button>
               
               {/* Create New Button */}
-              <button onClick={openWizard} className="btn-primary">
+              <Link href="/dashboard/sites/new" className="btn-primary">
                 <Plus className="w-4 h-4" />
                 <span className="hidden sm:inline">Create New</span>
-              </button>
+              </Link>
             </div>
           </div>
         </header>
@@ -251,9 +250,6 @@ export default function DashboardLayout({ children }) {
         <main className="content-area p-4 sm:p-6 lg:p-8">
           {children}
         </main>
-
-        {/* Global Create Site Wizard */}
-        <CreateSiteWizard />
       </div>
     </div>
   )

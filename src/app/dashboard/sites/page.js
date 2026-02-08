@@ -1,7 +1,6 @@
 'use client'
 
 import DashboardLayout from '@/components/DashboardLayout'
-import CreateSiteWizard from '@/components/onboarding/CreateSiteWizard'
 import useAppStore from '@/store/useAppStore'
 import { 
   Globe, 
@@ -20,7 +19,8 @@ import {
   ShieldCheck,
   Clock,
   Users,
-  Video
+  Video,
+  Eye
 } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -274,24 +274,36 @@ const SiteCard = ({ site, onDelete }) => {
             <BarChart3 className="w-4 h-4" />
           </Link>
         </div>
-        <a 
-          href={`https://${site.domain}`} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-neutral-900 text-white hover:bg-neutral-800 transition-colors"
-        >
-          <ExternalLink className="w-3.5 h-3.5" />
-          Visit Site
-        </a>
+        <div className="flex items-center gap-2">
+          {/* Preview Demo Button - Opens local preview */}
+          <Link 
+            href={`/site/${site.domain?.split('.')[0] || site.id}`}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-neutral-300 text-neutral-700 hover:bg-neutral-100 transition-colors"
+            title="Preview your demo website"
+          >
+            <Eye className="w-3.5 h-3.5" />
+            Preview
+          </Link>
+          {/* Visit Production Site Button */}
+          <a 
+            href={`https://${site.domain}`} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-neutral-900 text-white hover:bg-neutral-800 transition-colors"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            Visit Site
+          </a>
+        </div>
       </div>
     </div>
   )
 }
 
 // Empty State Component
-const EmptyState = ({ onCreateClick }) => (
-  <button 
-    onClick={onCreateClick}
+const EmptyState = () => (
+  <Link 
+    href="/dashboard/sites/new"
     className="empty-state col-span-full cursor-pointer hover:border-red-300 transition-colors"
   >
     <div className="w-16 h-16 rounded-2xl bg-red-100 flex items-center justify-center mb-4">
@@ -307,11 +319,11 @@ const EmptyState = ({ onCreateClick }) => (
         Create Your First Site
       </span>
     </div>
-  </button>
+  </Link>
 )
 
 export default function SitesPage() {
-  const { sites: storeSites, openWizard, deleteSite, user } = useAppStore()
+  const { sites: storeSites, deleteSite, user } = useAppStore()
   
   // Combine store sites with fallback data for demo
   const sites = storeSites.length > 0 ? storeSites : fallbackSitesData
@@ -329,9 +341,6 @@ export default function SitesPage() {
   
   return (
     <DashboardLayout>
-      {/* The Create Site Wizard Modal */}
-      <CreateSiteWizard />
-      
       <div className="space-y-8">
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -343,13 +352,13 @@ export default function SitesPage() {
               Manage your blogs, domains, and monetization settings
             </p>
           </div>
-          <button 
-            onClick={openWizard}
+          <Link 
+            href="/dashboard/sites/new"
             className="btn-primary"
           >
             <Plus className="w-4 h-4" />
             Create New Site
-          </button>
+          </Link>
         </div>
 
         {/* Stats Overview */}
@@ -407,13 +416,12 @@ export default function SitesPage() {
               <SiteCard key={site.id} site={site} onDelete={deleteSite} />
             ))
           ) : (
-            <EmptyState onCreateClick={openWizard} />
+            <EmptyState />
           )}
           
-          {/* Add New Site Card - Always visible if sites exist */}
           {sites.length > 0 && (
-            <button 
-              onClick={openWizard}
+            <Link 
+              href="/dashboard/sites/new"
               className="empty-state h-full min-h-[320px] cursor-pointer hover:border-red-300 transition-colors"
             >
               <div className="w-14 h-14 rounded-xl bg-neutral-200 flex items-center justify-center mb-3">
@@ -423,7 +431,7 @@ export default function SitesPage() {
               <p className="text-sm text-neutral-500 mt-1">
                 Create another blog from your videos
               </p>
-            </button>
+            </Link>
           )}
         </div>
 

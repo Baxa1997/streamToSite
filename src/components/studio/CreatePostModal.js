@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   X, 
@@ -214,7 +214,7 @@ function SourceCard({ icon: Icon, title, subtitle, isConnected, onClick, platfor
 
 // ========== MAIN MODAL COMPONENT ==========
 export default function CreatePostModal({ isOpen, onClose }) {
-  const { sites } = useAppStore()
+  const { sites, addToast } = useAppStore()
   
   // Wizard state
   const [step, setStep] = useState(1)
@@ -222,17 +222,60 @@ export default function CreatePostModal({ isOpen, onClose }) {
   const [selectedSource, setSelectedSource] = useState(null) // 'channel' | 'paste'
   const [selectedChannel, setSelectedChannel] = useState(null)
   const [selectedVideo, setSelectedVideo] = useState(null)
-  const [targetSite, setTargetSite] = useState(sites[0]?.id || null)
   const [pastedUrl, setPastedUrl] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  
+  // Target Site ID - the site where this post will be published
+  const [targetSiteId, setTargetSiteId] = useState(null)
+
+  // ========== SMART AUTO-SELECTION LOGIC ==========
+  useEffect(() => {
+    if (!sites || sites.length === 0) {
+      setTargetSiteId(null)
+      return
+    }
+
+    // Rule 1: If only one site, auto-select it
+    if (sites.length === 1) {
+      setTargetSiteId(sites[0].id)
+      return
+    }
+
+    // Rule 2: If multiple sites AND a channel is selected, try to match by name
+    if (sites.length > 1 && selectedChannel) {
+      const channelName = selectedChannel.name?.toLowerCase() || ''
+      
+      // Look for a site with a matching name (partial, case-insensitive)
+      const matchingSite = sites.find(site => {
+        const siteName = (site.connectedChannel?.name || site.name || '').toLowerCase()
+        return siteName.includes(channelName) || channelName.includes(siteName)
+      })
+      
+      if (matchingSite) {
+        setTargetSiteId(matchingSite.id)
+      } else {
+        // No match found, default to first site
+        setTargetSiteId(sites[0].id)
+      }
+      return
+    }
+
+    // Default: select first site
+    if (!targetSiteId && sites.length > 0) {
+      setTargetSiteId(sites[0].id)
+    }
+  }, [sites, selectedChannel])
+
+  // Get the currently selected site object
+  const selectedSite = sites.find(s => s.id === targetSiteId)
 
   // Mock connected channels from sites
   const connectedChannels = sites.map(site => ({
-    id: site.channelId || site.id,
-    name: site.channelName || site.name || 'My Channel',
-    avatar: site.channelAvatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=channel',
-    subscribers: site.channelSubscribers || '0',
-    platform: site.platform || 'youtube',
+    id: site.sources?.[0]?.channelId || site.connectedChannel?.id || site.id,
+    name: site.sources?.[0]?.name || site.connectedChannel?.name || site.name || 'My Channel',
+    avatar: site.sources?.[0]?.avatar || site.connectedChannel?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=channel',
+    subscribers: site.sources?.[0]?.subscribers || site.connectedChannel?.subscribers || '0',
+    platform: site.sources?.[0]?.platform || 'youtube',
     siteId: site.id,
   }))
 
@@ -244,6 +287,7 @@ export default function CreatePostModal({ isOpen, onClose }) {
     setSelectedChannel(null)
     setSelectedVideo(null)
     setPastedUrl('')
+    setTargetSiteId(null)
     onClose()
   }, [onClose])
 
@@ -260,7 +304,7 @@ export default function CreatePostModal({ isOpen, onClose }) {
       setSelectedChannel(channel)
       // Auto-select the site linked to this channel
       if (channel.siteId) {
-        setTargetSite(channel.siteId)
+        setTargetSiteId(channel.siteId)
       }
     }
     goToStep(2)
@@ -290,11 +334,18 @@ export default function CreatePostModal({ isOpen, onClose }) {
     }, 1500)
   }
 
-  // Handle editor open
-  const handleOpenEditor = () => {
-    if (!selectedVideo || !targetSite) return
+  // Handle creating the draft
+  const handleCreateDraft = () => {
+    if (!selectedVideo || !targetSiteId) {
+      addToast?.({ type: 'error', message: 'Please select a video and target site' })
+      return
+    }
+    
+    console.log('Creating post for Site ID:', targetSiteId)
+    console.log('Selected Video:', selectedVideo)
+    
     // Navigate to editor with the selected video and site
-    window.location.href = `/dashboard/editor/new?video=${selectedVideo.id}&site=${targetSite}`
+    window.location.href = `/dashboard/editor/new?video=${selectedVideo.id}&site=${targetSiteId}`
     handleClose()
   }
 
@@ -528,51 +579,84 @@ export default function CreatePostModal({ isOpen, onClose }) {
             </AnimatePresence>
           </div>
 
-          {/* Footer - Destination & Confirm */}
+          {/* ========== STICKY FOOTER - Target Website Selector ========== */}
           {selectedVideo && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="px-6 py-4 border-t border-neutral-800 bg-neutral-900/90 backdrop-blur flex items-center justify-between gap-4"
+              className="px-6 py-4 border-t border-neutral-800 bg-neutral-950/95 backdrop-blur-sm"
             >
-              <div className="flex items-center gap-3 flex-1">
-                <Globe className="w-5 h-5 text-neutral-400" />
-                <span className="text-sm text-neutral-400">Publishing to:</span>
-                
-                {/* Site Selector */}
-                {sites.length <= 1 ? (
-                  // Single site - just show the name
-                  <span className="font-medium text-white">
-                    {sites[0]?.channelName || sites[0]?.name || 'My Site'}
-                  </span>
-                ) : (
-                  // Multiple sites - show dropdown
-                  <div className="relative">
-                    <select
-                      value={targetSite || ''}
-                      onChange={(e) => setTargetSite(e.target.value)}
-                      className="appearance-none bg-neutral-800 border border-neutral-700 rounded-lg px-4 py-2 pr-10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50"
-                    >
-                      {sites.map((site) => (
-                        <option key={site.id} value={site.id}>
-                          {site.channelName || site.name}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
+              <div className="flex items-center justify-between gap-4">
+                {/* Left Side: Video Thumbnail + Title */}
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="relative w-16 h-9 rounded-md overflow-hidden flex-shrink-0 border border-neutral-700">
+                    <img
+                      src={selectedVideo.thumbnail}
+                      alt={selectedVideo.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                      <Play className="w-3 h-3 text-white fill-white" />
+                    </div>
                   </div>
-                )}
-              </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-white truncate">
+                      {selectedVideo.title}
+                    </p>
+                    <p className="text-xs text-neutral-500 truncate">
+                      {selectedVideo.duration} • {selectedVideo.views} views
+                    </p>
+                  </div>
+                </div>
 
-              <button
-                onClick={handleOpenEditor}
-                disabled={!selectedVideo || !targetSite}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 disabled:from-neutral-700 disabled:to-neutral-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-red-500/25 disabled:shadow-none"
-              >
-                <Sparkles className="w-5 h-5" />
-                Open Editor
-                <ArrowRight className="w-5 h-5" />
-              </button>
+                {/* Right Side: Publishing To Selector */}
+                <div className="flex items-center gap-4 flex-shrink-0">
+                  <div className="flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-neutral-500" />
+                    <span className="text-sm text-neutral-400">Publishing to:</span>
+                    
+                    {/* Site Selector */}
+                    {sites.length === 0 ? (
+                      // No sites - show message
+                      <span className="text-sm text-amber-400">
+                        No sites created yet
+                      </span>
+                    ) : sites.length === 1 ? (
+                      // Single site - just show the name (static)
+                      <span className="font-semibold text-white">
+                        {sites[0]?.connectedChannel?.name || sites[0]?.domain?.split('.')[0] || 'My Site'}
+                      </span>
+                    ) : (
+                      // Multiple sites - show dropdown
+                      <div className="relative">
+                        <select
+                          value={targetSiteId || ''}
+                          onChange={(e) => setTargetSiteId(e.target.value)}
+                          className="appearance-none bg-neutral-800 border border-neutral-700 rounded-md px-3 py-1.5 pr-8 text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 cursor-pointer hover:border-neutral-600 transition-colors"
+                        >
+                          {sites.map((site) => (
+                            <option key={site.id} value={site.id}>
+                              {site.connectedChannel?.name || site.domain?.split('.')[0] || site.id}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Create Draft Button */}
+                  <button
+                    onClick={handleCreateDraft}
+                    disabled={!selectedVideo || !targetSiteId}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 disabled:from-neutral-700 disabled:to-neutral-700 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all shadow-lg shadow-red-500/20 disabled:shadow-none"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    Create Draft
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
             </motion.div>
           )}
         </motion.div>
