@@ -57,7 +57,7 @@ const StarterCard = () => {
   const plan = PLANS.FREE
 
   return (
-    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-8 flex flex-col h-full hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors">
+    <div className="bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-8 flex flex-col h-full">
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-2">
@@ -122,7 +122,7 @@ const StarterCard = () => {
       {/* CTA */}
       <Link
         href="/dashboard"
-        className="w-full py-4 px-6 rounded-xl font-semibold text-center transition-all duration-300 bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-800 dark:text-white flex items-center justify-center gap-2"
+        className="w-full py-4 px-6 rounded-xl font-semibold text-center transition-all duration-300 bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center gap-2"
       >
         Get Started Free
         <ArrowRight className="w-4 h-4" />
