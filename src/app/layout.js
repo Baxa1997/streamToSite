@@ -1,5 +1,9 @@
 import './globals.css'
 
+import { ThemeProvider } from '@/context/ThemeContext'
+import ThemeSwitcher from '@/components/ThemeSwitcher'
+
+
 export const metadata = {
   title: 'StreamToSite - Turn Videos into SEO-Optimized Blogs',
   description: 'A Website-as-a-Service platform for Movie Recappers and News Creators. Convert YouTube videos into fully SEO-optimized, AdSense-ready blog posts.',
@@ -14,7 +18,10 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="min-h-screen">
-        {children}
+        <ThemeProvider>
+          {children}
+          <ThemeSwitcher />
+        </ThemeProvider>
       </body>
     </html>
   )

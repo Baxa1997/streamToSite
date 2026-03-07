@@ -30,11 +30,11 @@ const FeatureItem = ({ included, children, highlight = false }) => (
         <Check className={`w-3 h-3 ${highlight ? 'text-white' : 'text-emerald-500'}`} />
       </div>
     ) : (
-      <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 bg-neutral-700/50">
+      <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 bg-neutral-200/50 dark:bg-neutral-700/50">
         <X className="w-3 h-3 text-neutral-500" />
       </div>
     )}
-    <span className={included ? 'text-neutral-200' : 'text-neutral-500'}>
+    <span className={included ? 'text-neutral-700 dark:text-neutral-200' : 'text-neutral-500 dark:text-neutral-500'}>
       {children}
     </span>
   </li>
@@ -46,7 +46,7 @@ const LockedFeature = ({ children }) => (
     <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 bg-amber-500/20 border border-amber-500/30">
       <Zap className="w-3 h-3 text-amber-500" />
     </div>
-    <span className="text-neutral-400">
+    <span className="text-neutral-600 dark:text-neutral-400">
       {children} <span className="text-amber-500 text-xs font-medium">(Unlocks on Pro)</span>
     </span>
   </li>
@@ -57,48 +57,48 @@ const StarterCard = () => {
   const plan = PLANS.FREE
 
   return (
-    <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-8 flex flex-col h-full hover:border-neutral-700 transition-colors">
+    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-8 flex flex-col h-full hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors">
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-neutral-800 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
             <TrendingUp className="w-5 h-5 text-neutral-400" />
           </div>
           <div>
             <span className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Starter</span>
-            <h3 className="text-xl font-bold text-white">{plan.ui.headline}</h3>
+            <h3 className="text-xl font-bold text-neutral-900 dark:text-white">{plan.ui.headline}</h3>
           </div>
         </div>
         
         <div className="flex items-baseline gap-1 mt-4">
-          <span className="text-5xl font-bold text-white">$0</span>
-          <span className="text-neutral-500">/forever</span>
+          <span className="text-5xl font-bold text-neutral-900 dark:text-white">$0</span>
+          <span className="text-neutral-500 dark:text-neutral-500">/forever</span>
         </div>
-        <p className="text-neutral-500 text-sm mt-2">No credit card required. Free forever.</p>
+        <p className="text-neutral-500 dark:text-neutral-500 text-sm mt-2">No credit card required. Free forever.</p>
       </div>
 
       {/* Features - INCLUDED FIRST */}
       <ul className="space-y-3 flex-1 mb-8">
         {/* Included Features */}
-        <li className="text-xs font-semibold text-emerald-500 uppercase tracking-wider mb-2">What's Included</li>
+        <li className="text-xs font-semibold text-emerald-600 dark:text-emerald-500 uppercase tracking-wider mb-2">What's Included</li>
         <FeatureItem included={true} highlight={true}>
-          <strong className="text-white">Unlimited</strong> AI Blog Posts
+          <strong className="text-neutral-900 dark:text-white">Unlimited</strong> AI Blog Posts
         </FeatureItem>
         <FeatureItem included={true}>
-          <strong className="text-white">Auto-Sync 1</strong> YouTube Channel
+          <strong className="text-neutral-900 dark:text-white">Auto-Sync 1</strong> YouTube Channel
         </FeatureItem>
         <FeatureItem included={true}>
-          <strong className="text-white">Free Subdomain</strong> (yourname.streamtosite.com)
+          <strong className="text-neutral-900 dark:text-white">Free Subdomain</strong> (yourname.streamtosite.com)
         </FeatureItem>
         <FeatureItem included={true}>
-          <strong className="text-white">Analytics</strong> - Last 24 hours
+          <strong className="text-neutral-900 dark:text-white">Analytics</strong> - Last 24 hours
         </FeatureItem>
         <FeatureItem included={true}>
           Standard Theme
         </FeatureItem>
 
         {/* Divider */}
-        <li className="pt-3 border-t border-neutral-800"></li>
+        <li className="pt-3 border-t border-neutral-200 dark:border-neutral-800"></li>
         
         {/* Not Included Features */}
         <li className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Unlocks on Pro</li>
@@ -122,7 +122,7 @@ const StarterCard = () => {
       {/* CTA */}
       <Link
         href="/dashboard"
-        className="w-full py-4 px-6 rounded-xl font-semibold text-center transition-all duration-300 bg-neutral-800 hover:bg-neutral-700 text-white flex items-center justify-center gap-2"
+        className="w-full py-4 px-6 rounded-xl font-semibold text-center transition-all duration-300 bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-800 dark:text-white flex items-center justify-center gap-2"
       >
         Get Started Free
         <ArrowRight className="w-4 h-4" />
@@ -136,7 +136,7 @@ const ProCard = () => {
   const plan = PLANS.PRO
 
   return (
-    <div className="bg-gradient-to-b from-neutral-900 to-neutral-950 border-2 border-red-500 rounded-2xl p-8 flex flex-col h-full relative overflow-hidden">
+    <div className="bg-white dark:bg-gradient-to-b dark:from-neutral-900 dark:to-neutral-950 border-2 border-red-500 rounded-2xl p-8 flex flex-col h-full relative overflow-hidden">
       {/* Popular Badge */}
       <div className="absolute -top-px left-1/2 -translate-x-1/2">
         <div className="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold px-6 py-2 rounded-b-xl flex items-center gap-1.5 shadow-lg shadow-red-500/25">
@@ -153,15 +153,15 @@ const ProCard = () => {
           </div>
           <div>
             <span className="text-xs font-medium text-red-400 uppercase tracking-wider">Creator Pro</span>
-            <h3 className="text-xl font-bold text-white">{plan.ui.headline}</h3>
+            <h3 className="text-xl font-bold text-neutral-900 dark:text-white">{plan.ui.headline}</h3>
           </div>
         </div>
         
         <div className="flex items-baseline gap-1 mt-4">
           <span className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-orange-500">$29</span>
-          <span className="text-neutral-500">/month</span>
+          <span className="text-neutral-500 dark:text-neutral-500">/month</span>
         </div>
-        <p className="text-neutral-500 text-sm mt-2">Cancel anytime. 14-day money-back guarantee.</p>
+        <p className="text-neutral-500 dark:text-neutral-500 text-sm mt-2">Cancel anytime. 14-day money-back guarantee.</p>
       </div>
 
       {/* Features */}
@@ -170,36 +170,36 @@ const ProCard = () => {
         
         {/* Key Features - Highlighted */}
         <FeatureItem included={true} highlight={true}>
-          <strong className="text-white">Keep 100%</strong> Ad & Affiliate Revenue
+          <strong className="text-neutral-900 dark:text-white">Keep 100%</strong> Ad & Affiliate Revenue
         </FeatureItem>
         <FeatureItem included={true} highlight={true}>
-          <strong className="text-white">Connect Custom Domain</strong> (yourname.com)
+          <strong className="text-neutral-900 dark:text-white">Connect Custom Domain</strong> (yourname.com)
         </FeatureItem>
         
         {/* All Features */}
         <FeatureItem included={true}>
-          <strong className="text-white">Unlimited</strong> Blog Posts
+          <strong className="text-neutral-900 dark:text-white">Unlimited</strong> Blog Posts
         </FeatureItem>
         <FeatureItem included={true}>
-          <strong className="text-white">Auto-Sync 10</strong> YouTube Channels
+          <strong className="text-neutral-900 dark:text-white">Auto-Sync 10</strong> YouTube Channels
         </FeatureItem>
         <FeatureItem included={true}>
-          <strong className="text-white">Media Studio</strong> - Smart Snapshots & Video Tools
+          <strong className="text-neutral-900 dark:text-white">Media Studio</strong> - Smart Snapshots & Video Tools
         </FeatureItem>
         <FeatureItem included={true}>
-          <strong className="text-white">White Label</strong> - Remove "Powered By"
+          <strong className="text-neutral-900 dark:text-white">White Label</strong> - Remove "Powered By"
         </FeatureItem>
         <FeatureItem included={true}>
-          <strong className="text-white">Analytics</strong> - Realtime + 30-day history
+          <strong className="text-neutral-900 dark:text-white">Analytics</strong> - Realtime + 30-day history
         </FeatureItem>
         <FeatureItem included={true}>
-          <strong className="text-white">Email Newsletter</strong> Capture Forms
+          <strong className="text-neutral-900 dark:text-white">Email Newsletter</strong> Capture Forms
         </FeatureItem>
         <FeatureItem included={true}>
-          <strong className="text-white">Priority SEO</strong> Indexing
+          <strong className="text-neutral-900 dark:text-white">Priority SEO</strong> Indexing
         </FeatureItem>
         <FeatureItem included={true}>
-          <strong className="text-white">4 Premium</strong> Themes
+          <strong className="text-neutral-900 dark:text-white">4 Premium</strong> Themes
         </FeatureItem>
       </ul>
 
@@ -224,7 +224,7 @@ export default function PricingPage() {
   const [billingPeriod, setBillingPeriod] = useState('monthly')
 
   return (
-    <div className="min-h-screen bg-neutral-950">
+    <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100">
       {/* Navigation */}
       <nav className="border-b border-neutral-800 bg-neutral-950/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -294,9 +294,9 @@ export default function PricingPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-800">
+              <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
                 <tr>
-                  <td className="py-4 px-6 text-neutral-300">Blog Posts</td>
+                  <td className="py-4 px-6 text-neutral-700 dark:text-neutral-300">Blog Posts</td>
                   <td className="text-center py-4 px-6">
                     <span className="text-emerald-400 font-semibold">Unlimited</span>
                   </td>
@@ -305,7 +305,7 @@ export default function PricingPage() {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-4 px-6 text-neutral-300">Auto-Sync Channels</td>
+                  <td className="py-4 px-6 text-neutral-700 dark:text-neutral-300">Auto-Sync Channels</td>
                   <td className="text-center py-4 px-6 text-neutral-400">1 channel</td>
                   <td className="text-center py-4 px-6 text-white font-medium">10 channels</td>
                 </tr>
