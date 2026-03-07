@@ -150,9 +150,9 @@ export default function LandingPage() {
 
             {/* Subheadline */}
             <p className="text-xl sm:text-2xl text-neutral-300 max-w-3xl mx-auto leading-relaxed">
-              Turn your YouTube videos into a revenue-generating blog in seconds.
+              Convert YouTube videos to blog posts in seconds.
               <br />
-              <span className="text-neutral-400">No coding. No hosting headaches. Just paste and publish.</span>
+              <span className="text-neutral-400">No coding, no hosting. Just paste and publish.</span>
             </p>
 
             {/* CTA Buttons */}
