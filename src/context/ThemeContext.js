@@ -11,10 +11,13 @@ export const ThemeProvider = ({ children }) => {
     const storedTheme = localStorage.getItem('theme')
     if (storedTheme) {
       setTheme(storedTheme)
+      console.log('Initial theme from localStorage:', storedTheme)
     } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setTheme('dark')
+      console.log('Initial theme from system preference: dark')
     } else {
       setTheme('light')
+      console.log('Initial theme from system preference: light')
     }
   }, [])
 
@@ -22,22 +25,34 @@ export const ThemeProvider = ({ children }) => {
     const root = window.document.documentElement
 
     root.classList.remove('light', 'dark')
+    let currentTheme = theme
 
     if (theme === 'system') {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
       root.classList.add(systemTheme)
+      currentTheme = systemTheme
+      console.log('Applying system theme:', systemTheme)
     } else {
       root.classList.add(theme)
+      console.log('Applying theme:', theme)
     }
 
-    localStorage.setItem('theme', theme)
+    localStorage.setItem('theme', currentTheme)
+    console.log('HTML element classes:', root.classList.value)
   }, [theme])
 
   const toggleTheme = () => {
     setTheme(prevTheme => {
-      if (prevTheme === 'light') return 'dark'
-      if (prevTheme === 'dark') return 'system'
-      return 'light' // From system, go to light
+      let newTheme
+      if (prevTheme === 'light') {
+        newTheme = 'dark'
+      } else if (prevTheme === 'dark') {
+        newTheme = 'system'
+      } else {
+        newTheme = 'light' // From system, go to light
+      }
+      console.log('Toggling theme from', prevTheme, 'to', newTheme)
+      return newTheme
     })
   }
 
