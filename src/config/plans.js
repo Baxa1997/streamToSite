@@ -88,6 +88,48 @@ export const PLANS = {
       headline: 'Own Your Income.',
     }
   },
+
+  // ============================================
+  // ENTERPRISE TIER
+  // Goal: High-volume usage, dedicated support
+  // ============================================
+  ENTERPRISE: {
+    id: 'enterprise',
+    name: 'Enterprise',
+    label: 'Enterprise',
+    description: 'High-Volume & Dedicated Support',
+    price: 99,
+    priceDisplay: '$99',
+    billingPeriod: 'month',
+    stripePriceId: 'price_enterprise_monthly',
+
+    limits: {
+      sites: 'UNLIMITED',
+      posts: 'UNLIMITED',
+    },
+
+    features: {
+      autoSync: 'UNLIMITED', // Unlimited YouTube channels auto-sync
+      monetization: 'user', // User enters THEIR AdSense/Affiliate IDs. 100% theirs.
+      customDomain: true, // Connect www.yourname.com
+      removeBranding: true, // White label
+      analytics: 'realtime_plus_history', // Realtime + unlimited history
+      themes: ['standard', 'cinema', 'newspaper', 'minimal', 'enterprise_exclusive'], // All themes + exclusive
+      mediaTools: true, // Video Player & Snapshot tools in Editor
+      emailCapture: true, // Newsletter signup forms
+      prioritySeo: true, // Priority search indexing
+      dedicatedSupport: true, // Dedicated account manager
+      apiAccess: true, // Full API access
+    },
+
+    ui: {
+      badge: 'For Agencies',
+      highlighted: false,
+      ctaText: 'Contact Us',
+      ctaVariant: 'tertiary',
+      headline: 'Scale Your Business.',
+    }
+  },
 };
 
 // ============================================
@@ -105,6 +147,8 @@ export const FEATURE_LABELS = {
   mediaTools: 'Media Studio',
   emailCapture: 'Email capture',
   prioritySeo: 'Priority SEO',
+  dedicatedSupport: 'Dedicated Support',
+  apiAccess: 'API Access',
 };
 
 // ============================================
@@ -121,6 +165,9 @@ export const getPlanById = (planId) => {
   if (planId === 'business' || planId === 'pro' || planId === 'creator_pro') {
     return PLANS.PRO;
   }
+  if (planId === 'enterprise') {
+    return PLANS.ENTERPRISE;
+  }
   return PLANS.FREE;
 };
 
@@ -133,6 +180,9 @@ export const getPlanKey = (planId) => {
   }
   if (planId === 'business' || planId === 'pro' || planId === 'creator_pro') {
     return 'PRO';
+  }
+  if (planId === 'enterprise') {
+    return 'ENTERPRISE';
   }
   return 'FREE';
 };
@@ -165,6 +215,10 @@ export const hasFeatureAccess = (userPlanId, featureKey) => {
       return features.emailCapture;
     case 'prioritySeo':
       return features.prioritySeo;
+    case 'dedicatedSupport':
+      return features.dedicatedSupport;
+    case 'apiAccess':
+      return features.apiAccess;
     default:
       return false;
   }
@@ -203,10 +257,12 @@ export const getFeatureDisplayValue = (planKey, featureKey) => {
 
   switch (featureKey) {
     case 'sites':
+      if (limits.sites === 'UNLIMITED') return 'Unlimited';
       return limits.sites === 1 ? '1 site' : `${limits.sites} sites`;
     case 'posts':
       return limits.posts === 'UNLIMITED' ? 'Unlimited' : `${limits.posts}/month`;
     case 'autoSync':
+      if (features.autoSync === 'UNLIMITED') return 'Unlimited channels';
       return features.autoSync === 0 ? 'None' : `${features.autoSync} channel${features.autoSync > 1 ? 's' : ''}`;
     case 'monetization':
       return features.monetization === 'user' ? '100% yours' : '0% for you';
@@ -215,6 +271,7 @@ export const getFeatureDisplayValue = (planKey, featureKey) => {
     case 'removeBranding':
       return features.removeBranding ? 'White label' : 'StreamToSite branding';
     case 'analytics':
+      if (features.analytics === 'realtime_plus_history') return 'Realtime + Unlimited History';
       return features.analytics === 'realtime' ? 'Realtime + 30 days' : 'Last 24 hours';
     case 'themes':
       return `${features.themes.length} theme${features.themes.length > 1 ? 's' : ''}`;
@@ -224,6 +281,10 @@ export const getFeatureDisplayValue = (planKey, featureKey) => {
       return features.emailCapture ? 'Included' : 'Not available';
     case 'prioritySeo':
       return features.prioritySeo ? 'Priority indexing' : 'Standard';
+    case 'dedicatedSupport':
+      return features.dedicatedSupport ? 'Dedicated account manager' : 'Standard support';
+    case 'apiAccess':
+      return features.apiAccess ? 'Full API access' : 'Not available';
     default:
       return null;
   }

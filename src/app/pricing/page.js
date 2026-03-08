@@ -131,6 +131,63 @@ const StarterCard = () => {
   )
 }
 
+// Enterprise Plan Card
+const EnterpriseCard = () => {
+  const plan = PLANS.ENTERPRISE
+
+  return (
+    <div className="bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-8 flex flex-col h-full">
+      {/* Header */}
+      <div className="mb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+            <Globe className="w-5 h-5 text-purple-500" />
+          </div>
+          <div>
+            <span className="text-xs font-medium text-purple-400 uppercase tracking-wider">Enterprise</span>
+            <h3 className="text-xl font-bold text-neutral-900 dark:text-white">{plan.ui.headline}</h3>
+          </div>
+        </div>
+        
+        <div className="flex items-baseline gap-1 mt-4">
+          <span className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-fuchsia-500">$99</span>
+          <span className="text-neutral-500 dark:text-neutral-500">/month</span>
+        </div>
+        <p className="text-neutral-500 dark:text-neutral-500 text-sm mt-2">For high-volume creators & agencies.</p>
+      </div>
+
+      {/* Features */}
+      <ul className="space-y-3 flex-1 mb-8">
+        <li className="text-xs font-semibold text-purple-400 uppercase tracking-wider mb-2">All Pro Features, Plus:</li>
+        <FeatureItem included={true} highlight={true}>
+          <strong className="text-neutral-900 dark:text-white">Unlimited</strong> Sites
+        </FeatureItem>
+        <FeatureItem included={true} highlight={true}>
+          <strong className="text-neutral-900 dark:text-white">Unlimited</strong> Auto-Sync Channels
+        </FeatureItem>
+        <FeatureItem included={true}>
+          <strong className="text-neutral-900 dark:text-white">Realtime + Unlimited History</strong> Analytics
+        </FeatureItem>
+        <FeatureItem included={true}>
+          <strong className="text-neutral-900 dark:text-white">Dedicated Account Manager</strong>
+        </FeatureItem>
+        <FeatureItem included={true}>
+          <strong className="text-neutral-900 dark:text-white">Full API Access</strong>
+        </FeatureItem>
+      </ul>
+
+      {/* CTA */}
+      <Link
+        href="mailto:sales@streamtosite.com"
+        className="w-full py-4 px-6 rounded-xl font-semibold text-center transition-all duration-300 bg-purple-500 hover:bg-purple-600 text-white flex items-center justify-center gap-2"
+      >
+        Contact Sales
+        <ArrowRight className="w-4 h-4" />
+      </Link>
+    </div>
+  )
+}
+
 // Pro/Business Plan Card
 const ProCard = () => {
   const plan = PLANS.PRO
@@ -265,9 +322,10 @@ export default function PricingPage() {
       {/* Pricing Cards */}
       <section className="py-12 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-3 gap-6">
             <StarterCard />
             <ProCard />
+            <EnterpriseCard />
           </div>
         </div>
       </section>
@@ -284,13 +342,17 @@ export default function PricingPage() {
               <thead>
                 <tr className="border-b border-neutral-800">
                   <th className="text-left py-4 px-6 text-neutral-500 text-sm font-medium">Feature</th>
-                  <th className="text-center py-4 px-6 text-neutral-500 text-sm font-medium w-32">
+                  <th className="text-center py-4 px-6 text-neutral-500 text-sm font-medium w-28">
                     Starter
                     <span className="block text-xs text-neutral-600">Free</span>
                   </th>
-                  <th className="text-center py-4 px-6 text-red-400 text-sm font-medium w-32">
+                  <th className="text-center py-4 px-6 text-red-400 text-sm font-medium w-28">
                     Pro
-                    <span className="block text-xs text-neutral-500">$29/mo</span>
+                    <span className="block text-xs text-red-600">$29/mo</span>
+                  </th>
+                  <th className="text-center py-4 px-6 text-purple-400 text-sm font-medium w-28">
+                    Enterprise
+                    <span className="block text-xs text-purple-600">$99/mo</span>
                   </th>
                 </tr>
               </thead>
@@ -303,21 +365,29 @@ export default function PricingPage() {
                   <td className="text-center py-4 px-6">
                     <span className="text-emerald-400 font-semibold">Unlimited</span>
                   </td>
+                  <td className="text-center py-4 px-6">
+                    <span className="text-emerald-400 font-semibold">Unlimited</span>
+                  </td>
                 </tr>
                 <tr>
                   <td className="py-4 px-6 text-neutral-700 dark:text-neutral-300">Auto-Sync Channels</td>
                   <td className="text-center py-4 px-6 text-neutral-400">1 channel</td>
                   <td className="text-center py-4 px-6 text-white font-medium">10 channels</td>
+                  <td className="text-center py-4 px-6 text-white font-medium">Unlimited channels</td>
                 </tr>
                 <tr>
                   <td className="py-4 px-6 text-neutral-300">Ad Revenue Share</td>
                   <td className="text-center py-4 px-6 text-red-400">0%</td>
+                  <td className="text-center py-4 px-6 text-emerald-400 font-bold">100%</td>
                   <td className="text-center py-4 px-6 text-emerald-400 font-bold">100%</td>
                 </tr>
                 <tr>
                   <td className="py-4 px-6 text-neutral-300">Custom Domain</td>
                   <td className="text-center py-4 px-6">
                     <X className="w-5 h-5 text-neutral-600 mx-auto" />
+                  </td>
+                  <td className="text-center py-4 px-6">
+                    <Check className="w-5 h-5 text-emerald-400 mx-auto" />
                   </td>
                   <td className="text-center py-4 px-6">
                     <Check className="w-5 h-5 text-emerald-400 mx-auto" />
@@ -331,11 +401,17 @@ export default function PricingPage() {
                   <td className="text-center py-4 px-6">
                     <Check className="w-5 h-5 text-emerald-400 mx-auto" />
                   </td>
+                  <td className="text-center py-4 px-6">
+                    <Check className="w-5 h-5 text-emerald-400 mx-auto" />
+                  </td>
                 </tr>
                 <tr>
                   <td className="py-4 px-6 text-neutral-300">Remove Branding</td>
                   <td className="text-center py-4 px-6">
                     <X className="w-5 h-5 text-neutral-600 mx-auto" />
+                  </td>
+                  <td className="text-center py-4 px-6">
+                    <Check className="w-5 h-5 text-emerald-400 mx-auto" />
                   </td>
                   <td className="text-center py-4 px-6">
                     <Check className="w-5 h-5 text-emerald-400 mx-auto" />
@@ -349,16 +425,45 @@ export default function PricingPage() {
                   <td className="text-center py-4 px-6">
                     <Check className="w-5 h-5 text-emerald-400 mx-auto" />
                   </td>
+                  <td className="text-center py-4 px-6">
+                    <Check className="w-5 h-5 text-emerald-400 mx-auto" />
+                  </td>
                 </tr>
                 <tr>
                   <td className="py-4 px-6 text-neutral-300">Analytics</td>
                   <td className="text-center py-4 px-6 text-neutral-400">Last 24h</td>
                   <td className="text-center py-4 px-6 text-white font-medium">30 days + Realtime</td>
+                  <td className="text-center py-4 px-6 text-white font-medium">Realtime + Unlimited History</td>
                 </tr>
                 <tr>
                   <td className="py-4 px-6 text-neutral-300">Themes</td>
                   <td className="text-center py-4 px-6 text-neutral-400">1 theme</td>
                   <td className="text-center py-4 px-6 text-white font-medium">4 premium themes</td>
+                  <td className="text-center py-4 px-6 text-white font-medium">5 premium themes</td>
+                </tr>
+                <tr>
+                  <td className="py-4 px-6 text-neutral-300">Dedicated Support</td>
+                  <td className="text-center py-4 px-6">
+                    <X className="w-5 h-5 text-neutral-600 mx-auto" />
+                  </td>
+                  <td className="text-center py-4 px-6">
+                    <X className="w-5 h-5 text-neutral-600 mx-auto" />
+                  </td>
+                  <td className="text-center py-4 px-6">
+                    <Check className="w-5 h-5 text-emerald-400 mx-auto" />
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-4 px-6 text-neutral-300">API Access</td>
+                  <td className="text-center py-4 px-6">
+                    <X className="w-5 h-5 text-neutral-600 mx-auto" />
+                  </td>
+                  <td className="text-center py-4 px-6">
+                    <X className="w-5 h-5 text-neutral-600 mx-auto" />
+                  </td>
+                  <td className="text-center py-4 px-6">
+                    <Check className="w-5 h-5 text-emerald-400 mx-auto" />
+                  </td>
                 </tr>
               </tbody>
             </table>
