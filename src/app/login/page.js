@@ -35,7 +35,7 @@ export default function LoginPage() {
           {/* Login Card */}
           <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-8 shadow-xl">
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-red-400 mb-2 tracking-tight">Welcome</h1>
+              <h1 className="text-4xl font-bold text-red-400 mb-2 tracking-tight">Welcome to freedom</h1>
               <p className="text-neutral-400">Log in to your StreamToSite account.</p>
             </div>
 
