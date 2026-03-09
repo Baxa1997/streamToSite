@@ -143,9 +143,7 @@ export default function LandingPage() {
 
             {/* Main Headline */}
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight">
-              <span className="text-white">Own Your Audience.</span>
-              <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-600">Beat the Algorithm.</span>
+              <span className="text-white">OpenHands</span>
             </h1>
 
             {/* Subheadline */}
