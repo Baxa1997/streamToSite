@@ -1,0 +1,23 @@
+
+> streamtosite@0.1.0 dev
+> next dev
+
+ ⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use :::8000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at /app/storage/7508cda2-c057-4c29-8a7b-95c3c7bc1414/274d6cbe-220e-40c7-8f7f-9e3f12f6b139/node_modules/next/dist/server/lib/start-server.js:280:16
+    at new Promise (<anonymous>)
+    at startServer (/app/storage/7508cda2-c057-4c29-8a7b-95c3c7bc1414/274d6cbe-220e-40c7-8f7f-9e3f12f6b139/node_modules/next/dist/server/lib/start-server.js:191:11)
+    at /app/storage/7508cda2-c057-4c29-8a7b-95c3c7bc1414/274d6cbe-220e-40c7-8f7f-9e3f12f6b139/node_modules/next/dist/server/lib/start-server.js:310:52
+    at Span.traceAsyncFn (/app/storage/7508cda2-c057-4c29-8a7b-95c3c7bc1414/274d6cbe-220e-40c7-8f7f-9e3f12f6b139/node_modules/next/dist/trace/trace.js:154:26)
+    at process.<anonymous> (/app/storage/7508cda2-c057-4c29-8a7b-95c3c7bc1414/274d6cbe-220e-40c7-8f7f-9e3f12f6b139/node_modules/next/dist/server/lib/start-server.js:310:35)
+    at process.emit (node:events:524:28) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8000
+}
+[?25h
