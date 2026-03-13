@@ -16,7 +16,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen gradient-mesh flex flex-col">
+    <div className="min-h-screen bg-red-600 flex flex-col">
       {/* Header */}
       <header className="px-4 sm:px-6 lg:px-8 py-6">
         <div className="max-w-7xl mx-auto">
