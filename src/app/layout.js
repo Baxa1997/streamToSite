@@ -2,7 +2,8 @@ import './globals.css'
 
 import { ThemeProvider } from '@/context/ThemeContext'
 import ThemeSwitcher from '@/components/ThemeSwitcher'
-
+import Navbar from '@/components/Navbar'
+import CommandPalette from '@/components/CommandPalette'
 
 export const metadata = {
   title: 'StreamToSite - Turn Videos into SEO-Optimized Blogs',
@@ -19,7 +20,9 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-screen">
         <ThemeProvider>
+          <Navbar />
           {children}
+          <CommandPalette />
           <ThemeSwitcher />
         </ThemeProvider>
       </body>
