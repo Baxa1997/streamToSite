@@ -143,7 +143,7 @@ export default function LandingPage() {
 
             {/* Main Headline */}
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight">
-              <span className="text-white">OpenHands</span>
+              <span className="text-white">StreamToSite</span>
             </h1>
 
             {/* Subheadline */}
