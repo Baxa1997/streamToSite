@@ -1,16 +1,18 @@
 'use client'
 
 import Link from 'next/link'
-import { Sparkles, Mail, Lock, Eye, EyeOff, User } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Sparkles, Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
   })
+  const [error, setError] = useState('')
+  const router = useRouter()
 
   const handleChange = (e) => {
     setFormData({
@@ -21,33 +23,41 @@ export default function SignupPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    setError('')
+
+    // Default admin credentials
+    if (formData.email === 'admin1234' && formData.password === 'admin1234') {
+      router.push('/dashboard')
+      return
+    }
+
     // Handle signup logic here
     console.log('Signup with:', formData)
   }
 
   return (
     <div className="min-h-screen gradient-mesh flex flex-col">
-      {/* Header */}
-      <header className="px-4 sm:px-6 lg:px-8 py-6">
-        <div className="max-w-7xl mx-auto">
-          <Link href="/" className="flex items-center space-x-2 group w-fit">
-            <div className="bg-gradient-to-r from-red-500 to-red-600 p-2 rounded-lg group-hover:scale-110 transition-transform duration-300">
-              <Sparkles className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-600">StreamToSite</span>
-          </Link>
-        </div>
-      </header>
-
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
         <div className="w-full max-w-md">
           {/* Signup Card */}
           <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-8 shadow-xl">
             <div className="text-center mb-8">
+              <Link href="/" className="inline-flex items-center space-x-2 group mb-4">
+                <div className="bg-gradient-to-r from-red-500 to-red-600 p-2 rounded-lg group-hover:scale-110 transition-transform duration-300">
+                  <Sparkles className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-600">StreamToSite</span>
+              </Link>
               <h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
               <p className="text-neutral-400">Start your journey with StreamToSite.</p>
             </div>
+
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg text-sm mb-6">
+                {error}
+              </div>
+            )}
 
             {/* Google Signup */}
             <button 
@@ -75,26 +85,6 @@ export default function SignupPage() {
 
             {/* Signup Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Name */}
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-neutral-300 mb-2">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="John Doe"
-                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg pl-10 pr-4 py-3 text-white placeholder-neutral-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
-                    required
-                  />
-                </div>
-              </div>
-
               {/* Email */}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-neutral-300 mb-2">
@@ -103,12 +93,12 @@ export default function SignupPage() {
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
                   <input
-                    type="email"
+                    type="text"
                     id="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="ex: john@site.com"
+                    placeholder="Email or username"
                     className="w-full bg-neutral-800 border border-neutral-700 rounded-lg pl-10 pr-4 py-3 text-white placeholder-neutral-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
                     required
                   />
