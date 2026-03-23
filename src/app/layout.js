@@ -2,7 +2,7 @@ import './globals.css'
 
 import { ThemeProvider } from '@/context/ThemeContext'
 import ThemeSwitcher from '@/components/ThemeSwitcher'
-import Navbar from '@/components/Navbar'
+import GlobalNavWrapper from '@/components/GlobalNavWrapper'
 import CommandPalette from '@/components/CommandPalette'
 
 export const metadata = {
@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-screen">
         <ThemeProvider>
-          <Navbar />
+          <GlobalNavWrapper />
           {children}
           <CommandPalette />
           <ThemeSwitcher />

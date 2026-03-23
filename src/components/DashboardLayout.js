@@ -186,6 +186,48 @@ export default function DashboardLayout({ children }) {
 
       {/* Main Content Area */}
       <div className="lg:pl-64">
+        {/* Dashboard Header */}
+        <header className="sticky top-0 z-30 flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8 bg-white border-b border-neutral-200">
+          <div className="flex items-center gap-4">
+            {/* Mobile Menu Toggle */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden btn-light-ghost p-1.5"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            {/* Breadcrumbs */}
+            <nav aria-label="Breadcrumb" className="hidden sm:flex items-center space-x-2 text-sm">
+              {breadcrumbs.map((crumb, index) => (
+                <div key={crumb.href} className="flex items-center">
+                  <Link
+                    href={crumb.href}
+                    className={`font-medium ${crumb.isLast ? 'text-neutral-900' : 'text-neutral-500 hover:text-neutral-700'}`}
+                  >
+                    {crumb.name}
+                  </Link>
+                  {!crumb.isLast && (
+                    <ChevronRight className="w-4 h-4 text-neutral-400 ml-2" />
+                  )}
+                </div>
+              ))}
+            </nav>
+          </div>
+
+          {/* Right side icons */}
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard/studio" className="btn-primary flex items-center gap-2 text-sm">
+              <Plus className="w-4 h-4" />
+              Create
+            </Link>
+            <button className="btn-light-ghost p-1.5 text-neutral-500 hover:text-neutral-700">
+              <Search className="w-5 h-5" />
+            </button>
+            <button className="btn-light-ghost p-1.5 text-neutral-500 hover:text-neutral-700">
+              <Bell className="w-5 h-5" />
+            </button>
+          </div>
+        </header>
         {/* Page Content */}
         <main className="content-area p-4 sm:p-6 lg:p-8">
           {children}
