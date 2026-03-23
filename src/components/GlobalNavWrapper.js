@@ -7,7 +7,7 @@ export default function GlobalNavWrapper() {
   const pathname = usePathname()
 
   // Show Navbar only on non-dashboard and non-landing pages
-  const shouldShowNavbar = !pathname.startsWith('/dashboard') && pathname !== '/'
+  const shouldShowNavbar = !pathname.startsWith('/dashboard') && pathname !== '/' && pathname !== '/login' && pathname !== '/signup'
 
   if (!shouldShowNavbar) {
     return null
