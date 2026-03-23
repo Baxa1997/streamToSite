@@ -15,8 +15,8 @@ import {
 
 export default function WordPressConnect() {
   const [wpUrl, setWpUrl] = useState('')
-  const [wpUsername, setWpUsername] = useState('')
-  const [wpPassword, setWpPassword] = useState('')
+  const [wpUsername, setWpUsername] = useState('admin123')
+  const [wpPassword, setWpPassword] = useState('admin123')
   const [showPassword, setShowPassword] = useState(false)
   const [isConnecting, setIsConnecting] = useState(false)
   const [isConnected, setIsConnected] = useState(false)

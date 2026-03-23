@@ -6,8 +6,8 @@ import { useState } from 'react'
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('admin123@admin.com')
+  const [password, setPassword] = useState('admin123')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -16,7 +16,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-red-600 flex flex-col">
+    <div className="min-h-screen bg-neutral-950 flex flex-col">
       {/* Header */}
       <header className="px-4 sm:px-6 lg:px-8 py-6">
         <div className="max-w-7xl mx-auto">
@@ -35,7 +35,6 @@ export default function LoginPage() {
           {/* Login Card */}
           <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-8 shadow-xl">
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-red-400 mb-2 tracking-tight">Salom</h1>
               <p className="text-neutral-400">Log in to your StreamToSite account.</p>
             </div>
 

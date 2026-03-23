@@ -12,7 +12,7 @@ module.exports = {
         // Legacy support (can be removed later)
         background: '#0a0a0a',
         surface: '#171717',
-        primary: '#ef4444',
+        primary: '#3b82f6',
         text: '#ededed',
         'surface-light': '#1f1f1f',
         'border-color': '#2a2a2a',
