@@ -5,10 +5,10 @@ import DashboardLayout from '@/components/DashboardLayout'
 import useAppStore from '@/store/useAppStore'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { 
-  Eye, 
-  DollarSign, 
-  Globe, 
+import {
+  Eye,
+  DollarSign,
+  Globe,
   FileText,
   TrendingUp,
   ArrowUpRight,
@@ -102,7 +102,7 @@ const RevenueLockTooltip = ({ amount, onUpgrade }) => {
 // Site Card Component
 const SiteCard = ({ site, isPro }) => {
   const isVerified = site.isVerified
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -133,7 +133,7 @@ const SiteCard = ({ site, isPro }) => {
             )}
           </div>
           <p className="text-sm text-neutral-500 truncate">{site.domain}</p>
-          
+
           <div className="flex items-center gap-4 mt-3 text-xs text-neutral-500">
             <span className="flex items-center gap-1">
               <FileText className="w-3 h-3" />
@@ -149,7 +149,7 @@ const SiteCard = ({ site, isPro }) => {
             </span>
           </div>
         </div>
-        
+
         <div className="flex flex-col gap-2">
           <Link
             href={`/site/${site.domain.split('.')[0]}`}
@@ -257,47 +257,11 @@ export default function DashboardPage() {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Page Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">
-              Welcome back, <span className="text-gradient-red">{user.name}</span>
-            </h1>
-            <p className="text-neutral-500 mt-1">
-              Here's what's happening with your content empire
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            {/* Plan Toggle Button (for testing) */}
-            <button
-              onClick={togglePlan}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 ${
-                user.plan === 'pro'
-                  ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white'
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-              }`}
-            >
-              <Crown className="w-4 h-4" />
-              {user.plan === 'pro' ? 'Pro Plan' : 'Free Plan'}
-            </button>
-            <Link
-              href="/site/demo"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-white font-medium rounded-lg transition-colors shadow-lg"
-            >
-              <Eye className="w-4 h-4" />
-              Preview Site
-              <ExternalLink className="w-3.5 h-3.5 opacity-60" />
-            </Link>
-          </div>
-        </div>
-
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           {stats.map((stat, index) => {
             const Icon = stat.icon
-            
+
             return (
               <motion.div
                 key={stat.name}
@@ -314,18 +278,18 @@ export default function DashboardPage() {
                     <Sparkline data={stat.sparkline} color="#3b82f6" />
                   )}
                 </div>
-                
+
                 <p className="text-sm text-neutral-500 mb-1">{stat.name}</p>
                 <div className="flex items-center">
                   <p className="text-2xl font-bold text-neutral-900">{stat.value}</p>
                   {stat.locked && (
-                    <RevenueLockTooltip 
-                      amount={getTotalRevenue().toFixed(2)} 
+                    <RevenueLockTooltip
+                      amount={getTotalRevenue().toFixed(2)}
                       onUpgrade={upgradePlan}
                     />
                   )}
                 </div>
-                
+
                 {stat.changeType !== 'neutral' && (
                   <div className="flex items-center gap-1 mt-2">
                     {stat.changeType === 'positive' && !stat.locked && (
@@ -363,7 +327,7 @@ export default function DashboardPage() {
               </div>
             </div>
           </Link>
-          
+
           <Link
             href="/dashboard/studio"
             className="card p-5 hover:shadow-lg transition-all group border-2 border-transparent hover:border-blue-500"
@@ -378,7 +342,7 @@ export default function DashboardPage() {
               </div>
             </div>
           </Link>
-          
+
           <Link
             href="/dashboard/monetization"
             className="card p-5 hover:shadow-lg transition-all group border-2 border-transparent hover:border-green-500"
@@ -407,14 +371,14 @@ export default function DashboardPage() {
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-          
+
           {sites.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {sites.slice(0, 3).map((site, index) => (
-                <SiteCard 
-                  key={site.id} 
-                  site={site} 
-                  isPro={user.plan === 'pro'} 
+                <SiteCard
+                  key={site.id}
+                  site={site}
+                  isPro={user.plan === 'pro'}
                 />
               ))}
               {sites.length < 3 && (
