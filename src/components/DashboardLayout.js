@@ -3,10 +3,10 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { 
-  LayoutGrid, 
-  Globe, 
-  PenTool, 
+import {
+  LayoutGrid,
+  Globe,
+  PenTool,
   DollarSign,
   Settings,
   ChevronRight,
@@ -56,7 +56,7 @@ export default function DashboardLayout({ children }) {
     const segments = pathname.split('/').filter(Boolean)
     const breadcrumbs = []
     let currentPath = ''
-    
+
     segments.forEach((segment, index) => {
       currentPath += `/${segment}`
       const title = pageTitles[currentPath] || segment.charAt(0).toUpperCase() + segment.slice(1)
@@ -66,7 +66,7 @@ export default function DashboardLayout({ children }) {
         isLast: index === segments.length - 1
       })
     })
-    
+
     return breadcrumbs
   }
 
@@ -112,10 +112,10 @@ export default function DashboardLayout({ children }) {
           <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto custom-scrollbar custom-scrollbar-dark">
             <div className="sidebar-section-title">Main Menu</div>
             {mainNavigation.map((item) => {
-              const isActive = pathname === item.href || 
+              const isActive = pathname === item.href ||
                 (item.href !== '/dashboard' && pathname.startsWith(item.href))
               const Icon = item.icon
-              
+
               return (
                 <Link
                   key={item.name}
@@ -136,7 +136,7 @@ export default function DashboardLayout({ children }) {
             {bottomNavigation.map((item) => {
               const isActive = pathname === item.href
               const Icon = item.icon
-              
+
               return (
                 <Link
                   key={item.name}
@@ -159,7 +159,7 @@ export default function DashboardLayout({ children }) {
               <p className="upgrade-banner-text">
                 Unlock unlimited sites & advanced features
               </p>
-              <button 
+              <button
                 onClick={upgradePlan}
                 className="upgrade-banner-button"
               >
@@ -186,66 +186,6 @@ export default function DashboardLayout({ children }) {
 
       {/* Main Content Area */}
       <div className="lg:pl-64">
-        {/* Top Bar */}
-        <header className="sticky top-0 z-30 topbar">
-          <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
-            {/* Left: Mobile menu + Breadcrumbs */}
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="lg:hidden btn-dark-ghost p-2"
-              >
-                <Menu className="w-5 h-5" />
-              </button>
-              
-              {/* Breadcrumbs */}
-              <nav className="breadcrumb hidden sm:flex">
-                <Link href="/dashboard" className="breadcrumb-item flex items-center gap-1">
-                  <Home className="w-4 h-4" />
-                  <span>Home</span>
-                </Link>
-                {breadcrumbs.map((crumb, index) => (
-                  <div key={crumb.href} className="flex items-center gap-2">
-                    <ChevronRight className="w-4 h-4 breadcrumb-separator" />
-                    {crumb.isLast ? (
-                      <span className="breadcrumb-current">{crumb.name}</span>
-                    ) : (
-                      <Link href={crumb.href} className="breadcrumb-item">
-                        {crumb.name}
-                      </Link>
-                    )}
-                  </div>
-                ))}
-              </nav>
-              
-              {/* Mobile Title */}
-              <h1 className="text-lg font-semibold text-white sm:hidden">
-                {breadcrumbs[breadcrumbs.length - 1]?.name || 'Dashboard'}
-              </h1>
-            </div>
-
-            {/* Right: Actions */}
-            <div className="flex items-center gap-2">
-              {/* Search Button */}
-              <button className="btn-dark-ghost p-2 hidden sm:flex">
-                <Search className="w-5 h-5" />
-              </button>
-              
-              {/* Notifications */}
-              <button className="btn-dark-ghost p-2 relative">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
-              </button>
-              
-              {/* Create New Button */}
-              <Link href="/dashboard/sites/new" className="btn-primary">
-                <Plus className="w-4 h-4" />
-                <span className="hidden sm:inline">Create New</span>
-              </Link>
-            </div>
-          </div>
-        </header>
-
         {/* Page Content */}
         <main className="content-area p-4 sm:p-6 lg:p-8">
           {children}
