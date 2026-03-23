@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import Navbar from '@/components/Navbar'
 import PricingTable from '@/components/marketing/PricingTable'
 import { 
   TrendingDown, 
@@ -123,8 +122,6 @@ const footerLinks = {
 export default function LandingPage() {
   return (
     <div className="min-h-screen gradient-mesh">
-      <Navbar />
-
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Animated background elements */}
