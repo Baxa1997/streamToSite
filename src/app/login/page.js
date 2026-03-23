@@ -1,34 +1,23 @@
 'use client'
 
 import Link from 'next/link'
-import { Sparkles, Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('admin123@admin.com')
   const [password, setPassword] = useState('admin123')
+  const router = useRouter()
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Handle login logic here
-    console.log('Login with:', { email, password })
+    router.push('/dashboard')
   }
 
   return (
     <div className="min-h-screen bg-neutral-950 flex flex-col">
-      {/* Header */}
-      <header className="px-4 sm:px-6 lg:px-8 py-6">
-        <div className="max-w-7xl mx-auto">
-          <Link href="/" className="flex items-center space-x-2 group w-fit">
-            <div className="bg-gradient-to-r from-red-500 to-red-600 p-2 rounded-lg group-hover:scale-110 transition-transform duration-300">
-              <Sparkles className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-600">StreamToSite</span>
-          </Link>
-        </div>
-      </header>
-
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
         <div className="w-full max-w-md">
