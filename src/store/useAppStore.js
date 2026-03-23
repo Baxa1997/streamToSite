@@ -500,6 +500,10 @@ const useAppStore = create(
         get().addToast({ type: 'success', message: '🎉 Welcome to Pro! All features unlocked.' })
       },
 
+      logout: () => {
+        set({ user: null, sites: [], posts: [] })
+      },
+
       // ========== COMPUTED VALUES ==========
       getTotalViews: () => {
         return get().sites.reduce((sum, site) => sum + (site.stats?.views || 0), 0)

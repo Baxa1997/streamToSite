@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import {
   LayoutGrid,
@@ -48,8 +48,14 @@ const pageTitles = {
 
 export default function DashboardLayout({ children }) {
   const pathname = usePathname()
+  const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { user, upgradePlan } = useAppStore()
+  const { user, upgradePlan, logout } = useAppStore()
+
+  const handleLogout = () => {
+    logout()
+    router.push('/login')
+  }
 
   // Generate breadcrumbs from pathname
   const generateBreadcrumbs = () => {
@@ -176,7 +182,7 @@ export default function DashboardLayout({ children }) {
                 <p className="text-sm font-medium text-neutral-200 truncate">{user?.name || 'User'}</p>
                 <p className="text-xs text-neutral-500 truncate capitalize">{user?.plan || 'Free'} Plan</p>
               </div>
-              <button className="btn-dark-ghost p-1.5 text-neutral-500 hover:text-neutral-300">
+              <button onClick={handleLogout} className="btn-dark-ghost p-1.5 text-neutral-500 hover:text-neutral-300">
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
