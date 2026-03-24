@@ -241,7 +241,7 @@ export default function DashboardPage() {
       icon: DollarSign,
       iconBg: 'bg-green-100',
       iconColor: 'text-green-600',
-      locked: user.plan === 'free',
+      locked: user?.plan === 'free',
     },
     {
       name: 'Published Posts',
