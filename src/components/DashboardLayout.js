@@ -20,6 +20,7 @@ import {
   Bell,
   Search
 } from 'lucide-react'
+import { useCommandPaletteStore } from '@/store/commandPaletteStore'
 import useAppStore from '@/store/useAppStore'
 
 // Navigation items
@@ -50,6 +51,7 @@ export default function DashboardLayout({ children }) {
   const pathname = usePathname()
   const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const toggleCommandPalette = useCommandPaletteStore((state) => state.toggle)
   const { user, upgradePlan, logout } = useAppStore()
 
   const handleLogout = () => {
@@ -226,7 +228,24 @@ export default function DashboardLayout({ children }) {
               <Plus className="w-4 h-4" />
               Create
             </Link>
-            <button className="btn-light-ghost p-1.5 text-neutral-500 hover:text-neutral-700">
+
+            {/* Search (Command Palette Trigger) */}
+            <button
+              onClick={toggleCommandPalette}
+              className="hidden sm:flex items-center justify-center p-1.5 sm:p-2 rounded-md btn-light-ghost group"
+              title="Search or Command (Cmd+K)"
+            >
+              <Search className="w-5 h-5" />
+              <span className="ml-2 text-sm hidden lg:inline">Search</span>
+              <kbd className="ml-2 hidden lg:inline-flex items-center justify-center h-5 px-1.5 rounded bg-neutral-100 text-neutral-500 border border-neutral-200 text-[10px]">
+                ⌘K
+              </kbd>
+            </button>
+            {/* Mobile search icon only */}
+            <button
+              onClick={toggleCommandPalette}
+              className="sm:hidden btn-light-ghost p-1.5"
+            >
               <Search className="w-5 h-5" />
             </button>
             <button className="btn-light-ghost p-1.5 text-neutral-500 hover:text-neutral-700">
